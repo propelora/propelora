@@ -1,238 +1,1423 @@
-import { createClient } from "npm:@supabase/supabase-js@2";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+  <title>Propelora | Property Search</title>
 
-Deno.serve(async (req) => {
-  // Handle browser preflight request
-  if (req.method === "OPTIONS") {
-    return new Response("ok", {
-      headers: corsHeaders,
-    });
-  }
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  try {
-    // Get the logged-in user's authorization token
-    const authHeader = req.headers.get("Authorization");
-
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({
-          error: "You must be logged in to search properties.",
-        }),
-        {
-          status: 401,
-          headers: {
-            ...corsHeaders,
-            "Content-Type": "application/json",
-          },
-        },
-      );
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    // Create Supabase client
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      {
-        global: {
-          headers: {
-            Authorization: authHeader,
-          },
-        },
-      },
-    );
-
-    // Verify the logged-in user
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-
-    if (userError || !user) {
-      return new Response(
-        JSON.stringify({
-          error: "Your login session is invalid or expired.",
-        }),
-        {
-          status: 401,
-          headers: {
-            ...corsHeaders,
-            "Content-Type": "application/json",
-          },
-        },
-      );
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #07111f;
+      color: #ffffff;
+      min-height: 100vh;
     }
 
-    // Make sure the RentCast secret exists
-    const rentCastKey = Deno.env.get("RENTCAST_API_KEY");
-
-    if (!rentCastKey) {
-      return new Response(
-        JSON.stringify({
-          error: "RentCast API key is not configured in Supabase.",
-        }),
-        {
-          status: 500,
-          headers: {
-            ...corsHeaders,
-            "Content-Type": "application/json",
-          },
-        },
-      );
+    header {
+      background: #0b1728;
+      border-bottom: 1px solid #1b2c43;
+      padding: 18px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-    // Read the search request
-    const body = await req.json();
-
-    const city = String(body.city || "").trim();
-    const state = String(body.state || "").trim();
-    const zipCode = String(body.zipCode || "").trim();
-
-    const minPrice = body.minPrice
-      ? String(body.minPrice)
-      : "";
-
-    const maxPrice = body.maxPrice
-      ? String(body.maxPrice)
-      : "";
-
-    const bedrooms = body.bedrooms
-      ? String(body.bedrooms)
-      : "";
-
-    const propertyType = body.propertyType
-      ? String(body.propertyType)
-      : "";
-
-    const limit = Math.min(
-      Math.max(Number(body.limit) || 10, 1),
-      50,
-    );
-
-    // At least one location is required
-    if (!city && !zipCode) {
-      return new Response(
-        JSON.stringify({
-          error: "Enter a city or ZIP code.",
-        }),
-        {
-          status: 400,
-          headers: {
-            ...corsHeaders,
-            "Content-Type": "application/json",
-          },
-        },
-      );
+    .logo {
+      font-size: 25px;
+      font-weight: 800;
+      color: #35a7ff;
+      letter-spacing: 0.5px;
     }
 
-    // Build RentCast request
-    const params = new URLSearchParams();
-
-    if (city) {
-      params.set("city", city);
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
     }
 
-    if (state) {
-      params.set("state", state);
+    button {
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      border-radius: 8px;
+      transition: 0.2s;
     }
 
-    if (zipCode) {
-      params.set("zipCode", zipCode);
+    .btn {
+      padding: 11px 17px;
     }
 
-    if (minPrice) {
-      params.set("price", `${minPrice}:`);
+    .btn-primary {
+      background: #178cff;
+      color: white;
     }
 
-    if (maxPrice) {
-      if (minPrice) {
-        params.set("price", `${minPrice}:${maxPrice}`);
-      } else {
-        params.set("price", `:${maxPrice}`);
+    .btn-primary:hover {
+      background: #0878df;
+    }
+
+    .btn-secondary {
+      background: #17263a;
+      color: white;
+      border: 1px solid #2b405c;
+    }
+
+    .btn-secondary:hover {
+      background: #20344d;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 55px 20px 35px;
+    }
+
+    .hero h1 {
+      font-size: clamp(34px, 6vw, 62px);
+      margin-bottom: 15px;
+    }
+
+    .hero h1 span {
+      color: #269aff;
+    }
+
+    .hero p {
+      color: #9eb0c7;
+      font-size: 18px;
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1200px, 94%);
+      margin: auto;
+    }
+
+    .search-panel {
+      background: #0d1b2d;
+      border: 1px solid #203650;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+    }
+
+    .search-panel h2 {
+      margin-bottom: 20px;
+      font-size: 23px;
+    }
+
+    .search-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field label {
+      color: #9eb0c7;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 13px;
+      border-radius: 8px;
+      border: 1px solid #29415e;
+      background: #081522;
+      color: white;
+      outline: none;
+      font-size: 14px;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #269aff;
+    }
+
+    .search-button {
+      margin-top: 18px;
+      width: 100%;
+      padding: 15px;
+      font-size: 16px;
+      background: #178cff;
+      color: white;
+    }
+
+    .search-button:hover {
+      background: #0878df;
+    }
+
+    .status {
+      margin-top: 18px;
+      padding: 13px;
+      border-radius: 8px;
+      display: none;
+      line-height: 1.5;
+    }
+
+    .status.error {
+      display: block;
+      background: #3b1820;
+      border: 1px solid #7d2c3b;
+      color: #ffb6c1;
+    }
+
+    .status.success {
+      display: block;
+      background: #12351f;
+      border: 1px solid #28683d;
+      color: #a7e8b9;
+    }
+
+    .results-section {
+      padding: 35px 0 60px;
+    }
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 15px;
+    }
+
+    .results-header h2 {
+      font-size: 25px;
+    }
+
+    #resultCount {
+      color: #8fa3bb;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .property-card {
+      background: #0d1b2d;
+      border: 1px solid #203650;
+      border-radius: 14px;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .property-card:hover {
+      transform: translateY(-4px);
+      border-color: #269aff;
+    }
+
+    .property-image {
+      width: 100%;
+      height: 210px;
+      object-fit: cover;
+      background: #111d2c;
+    }
+
+    .property-content {
+      padding: 18px;
+    }
+
+    .property-price {
+      font-size: 24px;
+      font-weight: 800;
+      color: #35a7ff;
+      margin-bottom: 7px;
+    }
+
+    .property-address {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .property-details {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      color: #a9b8ca;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .property-type {
+      color: #8196ae;
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    .property-link {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      background: #17263a;
+      color: white;
+      padding: 11px;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+
+    .property-link:hover {
+      background: #20344d;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: #8498b0;
+      background: #0d1b2d;
+      border: 1px solid #203650;
+      border-radius: 14px;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 30px;
+      color: #8fb8df;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #28415e;
+      border-top-color: #269aff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
       }
     }
 
-    if (bedrooms) {
-      params.set("bedrooms", `${bedrooms}:`);
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
 
-    if (propertyType) {
-      params.set("propertyType", propertyType);
+    .modal-box {
+      width: min(430px, 100%);
+      background: #0d1b2d;
+      border: 1px solid #29415e;
+      border-radius: 15px;
+      padding: 25px;
+      position: relative;
     }
 
-    params.set("status", "Active");
-    params.set("limit", String(limit));
-
-    const rentCastUrl =
-      `https://api.rentcast.io/v1/listings/sale?${params.toString()}`;
-
-    // Ask RentCast for the actual properties
-    const rentCastResponse = await fetch(rentCastUrl, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "X-Api-Key": rentCastKey,
-      },
-    });
-
-    const rentCastData = await rentCastResponse.json();
-
-    if (!rentCastResponse.ok) {
-      return new Response(
-        JSON.stringify({
-          error: "RentCast request failed.",
-          details: rentCastData,
-        }),
-        {
-          status: rentCastResponse.status,
-          headers: {
-            ...corsHeaders,
-            "Content-Type": "application/json",
-          },
-        },
-      );
+    .modal-box h2 {
+      margin-bottom: 20px;
     }
 
-    // Return only the useful data to Propelora
-    return new Response(
-      JSON.stringify({
-        success: true,
-        user_id: user.id,
-        count: Array.isArray(rentCastData)
-          ? rentCastData.length
-          : 0,
-        listings: rentCastData,
-      }),
-      {
-        status: 200,
-        headers: {
-          ...corsHeaders,
-          "Content-Type": "application/json",
-        },
-      },
+    .close {
+      position: absolute;
+      right: 18px;
+      top: 15px;
+      font-size: 25px;
+      background: transparent;
+      color: #9eb0c7;
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .auth-form button {
+      padding: 13px;
+    }
+
+    .auth-switch {
+      text-align: center;
+      color: #8fa3bb;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .auth-switch button {
+      background: none;
+      color: #35a7ff;
+      padding: 0;
+    }
+
+    .user-info {
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-email {
+      color: #9eb0c7;
+      font-size: 13px;
+    }
+
+    footer {
+      border-top: 1px solid #1b2c43;
+      background: #091524;
+      padding: 30px 20px;
+      text-align: center;
+      color: #71859d;
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      .search-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .results-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 15px;
+      }
+
+      .hero {
+        padding-top: 35px;
+      }
+
+      .search-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .user-email {
+        display: none;
+      }
+
+      .logo {
+        font-size: 21px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">PROPELORA</div>
+
+  <div class="auth-buttons">
+    <div class="user-info" id="userInfo">
+      <span class="user-email" id="userEmail"></span>
+      <button class="btn btn-secondary" onclick="logout()">Log Out</button>
+    </div>
+
+    <div id="authButtons">
+      <button class="btn btn-secondary" onclick="openAuth('login')">
+        Log In
+      </button>
+      <button class="btn btn-primary" onclick="openAuth('signup')">
+        Sign Up
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Find Your Next <span>Property</span></h1>
+  <p>
+    Search active property listings and discover opportunities
+    using Propelora's property search.
+  </p>
+</section>
+
+<main class="container">
+
+  <section class="search-panel">
+    <h2>Property Search</h2>
+
+    <div class="search-grid">
+
+      <div class="field">
+        <label for="city">City</label>
+        <input
+          id="city"
+          type="text"
+          placeholder="Lima"
+        />
+      </div>
+
+      <div class="field">
+        <label for="state">State</label>
+        <input
+          id="state"
+          type="text"
+          placeholder="OH"
+        />
+      </div>
+
+      <div class="field">
+        <label for="zipCode">ZIP Code</label>
+        <input
+          id="zipCode"
+          type="text"
+          placeholder="45801"
+        />
+      </div>
+
+      <div class="field">
+        <label for="propertyType">Property Type</label>
+
+        <select id="propertyType">
+          <option value="">Any Property Type</option>
+          <option value="Single Family">Single Family</option>
+          <option value="Condo">Condo</option>
+          <option value="Townhouse">Townhouse</option>
+          <option value="Multi-Family">Multi-Family</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="minPrice">Minimum Price</label>
+        <input
+          id="minPrice"
+          type="number"
+          placeholder="50000"
+          min="0"
+        />
+      </div>
+
+      <div class="field">
+        <label for="maxPrice">Maximum Price</label>
+        <input
+          id="maxPrice"
+          type="number"
+          placeholder="250000"
+          min="0"
+        />
+      </div>
+
+      <div class="field">
+        <label for="bedrooms">Minimum Bedrooms</label>
+        <input
+          id="bedrooms"
+          type="number"
+          placeholder="2"
+          min="0"
+        />
+      </div>
+
+      <div class="field">
+        <label for="limit">Number of Results</label>
+        <select id="limit">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+
+    </div>
+
+    <button
+      class="search-button"
+      id="searchButton"
+      onclick="searchProperties()"
+    >
+      Search Properties
+    </button>
+
+    <div id="status" class="status"></div>
+  </section>
+
+  <section class="results-section">
+
+    <div class="results-header">
+      <h2>Property Results</h2>
+      <span id="resultCount"></span>
+    </div>
+
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      Searching properties...
+    </div>
+
+    <div id="results" class="results-grid">
+      <div class="empty-state">
+        Enter a location above and click
+        <strong>Search Properties</strong> to begin.
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  © 2026 Propelora. Property data provided through third-party services.
+</footer>
+
+<!-- AUTH MODAL -->
+
+<div class="modal" id="authModal">
+
+  <div class="modal-box">
+
+    <button class="close" onclick="closeAuth()">×</button>
+
+    <h2 id="authTitle">Log In</h2>
+
+    <div class="auth-form">
+
+      <input
+        id="authEmail"
+        type="email"
+        placeholder="Email address"
+      />
+
+      <input
+        id="authPassword"
+        type="password"
+        placeholder="Password"
+      />
+
+      <button
+        class="btn-primary"
+        id="authSubmit"
+        onclick="submitAuth()"
+      >
+        Log In
+      </button>
+
+    </div>
+
+    <div class="auth-switch">
+      <span id="authSwitchText">
+        Don't have an account?
+      </span>
+
+      <button onclick="toggleAuthMode()" id="authSwitchButton">
+        Sign Up
+      </button>
+    </div>
+
+    <div
+      id="authStatus"
+      class="status"
+      style="margin-top:15px;"
+    ></div>
+
+  </div>
+
+</div>
+
+<script>
+  // ==========================================
+  // SUPABASE CONFIGURATION
+  // ==========================================
+
+  const SUPABASE_URL =
+    "https://amxqnuuqvwvinmekwqfd.supabase.co";
+
+  const SUPABASE_ANON_KEY =
+    "sb_publishable_gCOTp1NWvsGojwYIrgu2Mg_QdLBDLmm";
+
+  const FUNCTION_URL =
+    SUPABASE_URL + "/functions/v1/search-properties";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
     );
-  } catch (error) {
-    console.error(error);
 
-    return new Response(
-      JSON.stringify({
-        error: "Something went wrong while searching properties.",
-        details: error instanceof Error
-          ? error.message
-          : String(error),
-      }),
-      {
-        status: 500,
-        headers: {
-          ...corsHeaders,
-          "Content-Type": "application/json",
-        },
-      },
-    );
+
+  // ==========================================
+  // AUTH STATE
+  // ==========================================
+
+  let currentSession = null;
+  let authMode = "login";
+
+
+  async function loadSession() {
+
+    const {
+      data,
+      error
+    } = await supabaseClient.auth.getSession();
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    currentSession = data.session;
+
+    updateAuthUI();
   }
-});
+
+
+  supabaseClient.auth.onAuthStateChange(
+    (_event, session) => {
+
+      currentSession = session;
+
+      updateAuthUI();
+    }
+  );
+
+
+  function updateAuthUI() {
+
+    const authButtons =
+      document.getElementById("authButtons");
+
+    const userInfo =
+      document.getElementById("userInfo");
+
+    const userEmail =
+      document.getElementById("userEmail");
+
+    if (currentSession) {
+
+      authButtons.style.display = "none";
+      userInfo.style.display = "flex";
+
+      userEmail.textContent =
+        currentSession.user.email || "";
+
+    } else {
+
+      authButtons.style.display = "flex";
+      userInfo.style.display = "none";
+
+      userEmail.textContent = "";
+    }
+  }
+
+
+  // ==========================================
+  // AUTH MODAL
+  // ==========================================
+
+  function openAuth(mode) {
+
+    authMode = mode;
+
+    document.getElementById("authModal").style.display =
+      "flex";
+
+    updateAuthModal();
+  }
+
+
+  function closeAuth() {
+
+    document.getElementById("authModal").style.display =
+      "none";
+
+    document.getElementById("authStatus").style.display =
+      "none";
+  }
+
+
+  function toggleAuthMode() {
+
+    authMode =
+      authMode === "login"
+        ? "signup"
+        : "login";
+
+    updateAuthModal();
+  }
+
+
+  function updateAuthModal() {
+
+    const title =
+      document.getElementById("authTitle");
+
+    const submit =
+      document.getElementById("authSubmit");
+
+    const switchText =
+      document.getElementById("authSwitchText");
+
+    const switchButton =
+      document.getElementById("authSwitchButton");
+
+    if (authMode === "login") {
+
+      title.textContent = "Log In";
+      submit.textContent = "Log In";
+      switchText.textContent =
+        "Don't have an account?";
+      switchButton.textContent =
+        "Sign Up";
+
+    } else {
+
+      title.textContent = "Create Account";
+      submit.textContent = "Sign Up";
+      switchText.textContent =
+        "Already have an account?";
+      switchButton.textContent =
+        "Log In";
+    }
+  }
+
+
+  async function submitAuth() {
+
+    const email =
+      document.getElementById("authEmail")
+        .value
+        .trim();
+
+    const password =
+      document.getElementById("authPassword")
+        .value;
+
+    const status =
+      document.getElementById("authStatus");
+
+    if (!email || !password) {
+
+      showAuthStatus(
+        "Enter your email and password.",
+        true
+      );
+
+      return;
+    }
+
+    status.className = "status";
+    status.style.display = "none";
+
+    let result;
+
+    if (authMode === "login") {
+
+      result =
+        await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
+
+    } else {
+
+      result =
+        await supabaseClient.auth.signUp({
+          email,
+          password
+        });
+    }
+
+    if (result.error) {
+
+      showAuthStatus(
+        result.error.message,
+        true
+      );
+
+      return;
+    }
+
+    if (authMode === "signup") {
+
+      if (!result.data.session) {
+
+        showAuthStatus(
+          "Account created. Check your email to confirm your account.",
+          false
+        );
+
+        return;
+      }
+    }
+
+    closeAuth();
+  }
+
+
+  function showAuthStatus(message, isError) {
+
+    const status =
+      document.getElementById("authStatus");
+
+    status.textContent = message;
+
+    status.className =
+      isError
+        ? "status error"
+        : "status success";
+
+    status.style.display = "block";
+  }
+
+
+  async function logout() {
+
+    await supabaseClient.auth.signOut();
+
+    currentSession = null;
+
+    updateAuthUI();
+  }
+
+
+  // ==========================================
+  // SEARCH PROPERTIES
+  // ==========================================
+
+  async function searchProperties() {
+
+    const city =
+      document.getElementById("city")
+        .value
+        .trim();
+
+    const state =
+      document.getElementById("state")
+        .value
+        .trim();
+
+    const zipCode =
+      document.getElementById("zipCode")
+        .value
+        .trim();
+
+    const propertyType =
+      document.getElementById("propertyType")
+        .value;
+
+    const minPrice =
+      document.getElementById("minPrice")
+        .value;
+
+    const maxPrice =
+      document.getElementById("maxPrice")
+        .value;
+
+    const bedrooms =
+      document.getElementById("bedrooms")
+        .value;
+
+    const limit =
+      document.getElementById("limit")
+        .value;
+
+
+    // Require login
+    if (!currentSession) {
+
+      showStatus(
+        "Please log in or create an account before searching.",
+        true
+      );
+
+      openAuth("login");
+
+      return;
+    }
+
+
+    // Require location
+    if (!city && !zipCode) {
+
+      showStatus(
+        "Enter a city or ZIP code.",
+        true
+      );
+
+      return;
+    }
+
+
+    const searchButton =
+      document.getElementById("searchButton");
+
+    const loading =
+      document.getElementById("loading");
+
+    const results =
+      document.getElementById("results");
+
+
+    searchButton.disabled = true;
+    searchButton.textContent =
+      "Searching...";
+
+    loading.style.display = "block";
+
+    results.innerHTML = "";
+
+    document.getElementById("resultCount")
+      .textContent = "";
+
+    hideStatus();
+
+
+    try {
+
+      const {
+        data: sessionData,
+        error: sessionError
+      } =
+        await supabaseClient.auth.getSession();
+
+
+      if (sessionError ||
+          !sessionData.session) {
+
+        throw new Error(
+          "Your login session has expired. Please log in again."
+        );
+      }
+
+
+      currentSession =
+        sessionData.session;
+
+
+      const response =
+        await fetch(
+          FUNCTION_URL,
+          {
+            method: "POST",
+
+            headers: {
+              "Authorization":
+                "Bearer " +
+                currentSession.access_token,
+
+              "apikey":
+                SUPABASE_ANON_KEY,
+
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+              city,
+              state,
+              zipCode,
+              minPrice,
+              maxPrice,
+              bedrooms,
+              propertyType,
+              limit: Number(limit)
+            })
+          }
+        );
+
+
+      let data;
+
+      try {
+
+        data = await response.json();
+
+      } catch {
+
+        throw new Error(
+          "The property search returned an invalid response."
+        );
+      }
+
+
+      if (!response.ok) {
+
+        let message =
+          data.error ||
+          "Property search failed.";
+
+        if (data.details) {
+
+          if (
+            typeof data.details ===
+            "string"
+          ) {
+
+            message +=
+              " " +
+              data.details;
+
+          } else if (
+            data.details.message
+          ) {
+
+            message +=
+              " " +
+              data.details.message;
+          }
+        }
+
+        throw new Error(message);
+      }
+
+
+      const listings =
+        Array.isArray(data.listings)
+          ? data.listings
+          : [];
+
+
+      renderResults(listings);
+
+
+      showStatus(
+        listings.length +
+          " propert" +
+          (listings.length === 1
+            ? "y"
+            : "ies") +
+          " found.",
+        false
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+      results.innerHTML = `
+        <div class="empty-state">
+          <h3>Search failed</h3>
+          <p style="margin-top:10px;">
+            ${escapeHtml(error.message)}
+          </p>
+        </div>
+      `;
+
+      showStatus(
+        error.message,
+        true
+      );
+
+    } finally {
+
+      searchButton.disabled = false;
+      searchButton.textContent =
+        "Search Properties";
+
+      loading.style.display = "none";
+    }
+  }
+
+
+  // ==========================================
+  // RENDER PROPERTY RESULTS
+  // ==========================================
+
+  function renderResults(listings) {
+
+    const results =
+      document.getElementById("results");
+
+    const resultCount =
+      document.getElementById("resultCount");
+
+
+    resultCount.textContent =
+      listings.length +
+      " result" +
+      (listings.length === 1
+        ? ""
+        : "s");
+
+
+    if (!listings.length) {
+
+      results.innerHTML = `
+        <div class="empty-state">
+          <h3>No properties found</h3>
+          <p style="margin-top:10px;">
+            Try changing your location,
+            price range, or other filters.
+          </p>
+        </div>
+      `;
+
+      return;
+    }
+
+
+    results.innerHTML =
+      listings
+        .map(propertyCard)
+        .join("");
+  }
+
+
+  function propertyCard(property) {
+
+    const image =
+      property.photo ||
+      (
+        Array.isArray(property.photos) &&
+        property.photos.length
+          ? property.photos[0]
+          : ""
+      );
+
+
+    const address =
+      property.formattedAddress ||
+      [
+        property.addressLine1,
+        property.city,
+        property.state,
+        property.zipCode
+      ]
+        .filter(Boolean)
+        .join(", ") ||
+      "Address unavailable";
+
+
+    const price =
+      property.price != null
+        ? "$" +
+          Number(property.price)
+            .toLocaleString()
+        : "Price unavailable";
+
+
+    const bedrooms =
+      property.bedrooms != null
+        ? property.bedrooms +
+          " bed"
+        : "";
+
+
+    const bathrooms =
+      property.bathrooms != null
+        ? property.bathrooms +
+          " bath"
+        : "";
+
+
+    const squareFootage =
+      property.squareFootage != null
+        ? Number(
+            property.squareFootage
+          ).toLocaleString() +
+          " sq ft"
+        : "";
+
+
+    const details =
+      [
+        bedrooms,
+        bathrooms,
+        squareFootage
+      ]
+        .filter(Boolean)
+        .join(" • ");
+
+
+    const type =
+      property.propertyType ||
+      "Property";
+
+
+    const listingUrl =
+      property.listingUrl ||
+      property.url ||
+      "";
+
+
+    const safeImage =
+      image
+        ? escapeAttribute(image)
+        : "";
+
+
+    return `
+      <article class="property-card">
+
+        ${
+          safeImage
+            ? `
+              <img
+                class="property-image"
+                src="${safeImage}"
+                alt="Property"
+                onerror="this.style.display='none'"
+              />
+            `
+            : `
+              <div
+                class="property-image"
+                style="
+                  display:flex;
+                  align-items:center;
+                  justify-content:center;
+                  color:#71859d;
+                "
+              >
+                No Image Available
+              </div>
+            `
+        }
+
+        <div class="property-content">
+
+          <div class="property-price">
+            ${escapeHtml(price)}
+          </div>
+
+          <div class="property-address">
+            ${escapeHtml(address)}
+          </div>
+
+          ${
+            details
+              ? `
+                <div class="property-details">
+                  ${escapeHtml(details)}
+                </div>
+              `
+              : ""
+          }
+
+          <div class="property-type">
+            ${escapeHtml(type)}
+          </div>
+
+          ${
+            listingUrl
+              ? `
+                <a
+                  class="property-link"
+                  href="${escapeAttribute(listingUrl)}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Listing
+                </a>
+              `
+              : `
+                <div
+                  class="property-link"
+                  style="opacity:.5;"
+                >
+                  Listing Link Unavailable
+                </div>
+              `
+          }
+
+        </div>
+      </article>
+    `;
+  }
+
+
+  // ==========================================
+  // STATUS MESSAGES
+  // ==========================================
+
+  function showStatus(message, isError) {
+
+    const status =
+      document.getElementById("status");
+
+    status.textContent =
+      message;
+
+    status.className =
+      isError
+        ? "status error"
+        : "status success";
+
+    status.style.display =
+      "block";
+  }
+
+
+  function hideStatus() {
+
+    const status =
+      document.getElementById("status");
+
+    status.style.display =
+      "none";
+  }
+
+
+  // ==========================================
+  // SECURITY HELPERS
+  // ==========================================
+
+  function escapeHtml(value) {
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+
+  function escapeAttribute(value) {
+
+    return escapeHtml(value);
+  }
+
+
+  // ==========================================
+  // ENTER KEY SEARCH
+  // ==========================================
+
+  document.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key === "Enter" &&
+        document.activeElement.tagName !== "BUTTON"
+      ) {
+
+        searchProperties();
+      }
+    }
+  );
+
+
+  // ==========================================
+  // START APP
+  // ==========================================
+
+  loadSession();
+
+</script>
+
+</body>
+</html>
