@@ -1,13 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Propelora</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -19,103 +14,128 @@
 
     body {
       margin: 0;
-      font-family:
-        Inter,
-        Arial,
-        Helvetica,
-        sans-serif;
-      background:
-        linear-gradient(
-          135deg,
-          #07111f,
-          #0b1728 45%,
-          #101c30
-        );
-      color: #ffffff;
-      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #07111f;
+      color: #f5f7fb;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .hidden {
+      display: none !important;
     }
 
     header {
+      background: #0b1728;
+      border-bottom: 1px solid #20324a;
+      padding: 18px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 30px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      background: rgba(5,12,24,.8);
-      backdrop-filter: blur(10px);
+      gap: 15px;
       position: sticky;
       top: 0;
-      z-index: 20;
+      z-index: 10;
     }
 
     .logo {
       font-size: 25px;
       font-weight: 800;
       letter-spacing: .5px;
-      color: #55a7ff;
+    }
+
+    .logo span {
+      color: #4da3ff;
     }
 
     .user-area {
       display: flex;
       align-items: center;
       gap: 12px;
-      font-size: 13px;
       color: #aebbd0;
+      font-size: 14px;
     }
 
-    button {
-      cursor: pointer;
+    .btn {
       border: 0;
-    }
-
-    .logout-btn {
-      background: #1c2b42;
-      color: white;
-      padding: 9px 14px;
       border-radius: 8px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: 700;
     }
 
-    .logout-btn:hover {
-      background: #263b58;
+    .btn-primary {
+      background: #2587ff;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1678ed;
+    }
+
+    .btn-secondary {
+      background: #17263a;
+      color: white;
+      border: 1px solid #2a405c;
+    }
+
+    .btn-secondary:hover {
+      background: #20344d;
     }
 
     .container {
-      width: min(1200px, 92%);
+      max-width: 1450px;
       margin: 0 auto;
+      padding: 30px 20px 60px;
     }
 
     .hero {
-      padding: 50px 0 25px;
+      margin-bottom: 25px;
     }
 
     .hero h1 {
-      margin: 0 0 10px;
-      font-size: clamp(32px, 5vw, 52px);
-      line-height: 1.05;
+      margin: 0 0 8px;
+      font-size: 34px;
     }
 
     .hero p {
-      color: #9eacc0;
-      font-size: 17px;
       margin: 0;
-      max-width: 700px;
+      color: #9eacc0;
     }
 
-    .search-box {
-      background: rgba(13,28,49,.9);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 18px;
+    .search-panel {
+      background: #0d1b2d;
+      border: 1px solid #20344e;
+      border-radius: 14px;
       padding: 22px;
-      margin: 20px 0 35px;
-      box-shadow:
-        0 15px 45px rgba(0,0,0,.25);
+      margin-bottom: 25px;
     }
 
-    .search-grid {
+    .section-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 15px;
+      color: #ffffff;
+    }
+
+    .filter-section {
+      border-top: 1px solid #20344e;
+      padding-top: 20px;
+      margin-top: 20px;
+    }
+
+    .filter-grid {
       display: grid;
-      grid-template-columns:
-        repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 14px;
+    }
+
+    .filter-grid.five {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
     }
 
     .field {
@@ -125,133 +145,133 @@
     }
 
     .field label {
-      font-size: 12px;
-      color: #9eacc0;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 700;
+      color: #b7c4d7;
     }
 
-    input,
-    select {
+    .field input,
+    .field select {
       width: 100%;
-      padding: 12px 13px;
-      border-radius: 9px;
-      border: 1px solid #263a56;
-      background: #091728;
-      color: white;
+      padding: 11px 12px;
+      border-radius: 8px;
+      border: 1px solid #2b425e;
+      background: #081423;
+      color: #ffffff;
       outline: none;
-      font-size: 14px;
     }
 
-    input:focus,
-    select:focus {
-      border-color: #4da3ff;
-      box-shadow:
-        0 0 0 3px rgba(77,163,255,.12);
+    .field input:focus,
+    .field select:focus {
+      border-color: #2587ff;
     }
 
-    .search-button {
-      margin-top: 17px;
-      width: 100%;
-      padding: 14px;
-      border-radius: 10px;
-      background:
-        linear-gradient(
-          135deg,
-          #2685f5,
-          #4ba5ff
-        );
-      color: white;
-      font-size: 15px;
-      font-weight: 800;
-      transition: .2s;
+    .range-note {
+      color: #7f90a7;
+      font-size: 11px;
+      margin-top: 2px;
     }
 
-    .search-button:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.08);
+    .search-actions {
+      margin-top: 22px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    .search-button:disabled {
-      opacity: .6;
-      cursor: wait;
-      transform: none;
+    .preset-buttons {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
     }
 
-    .status {
-      min-height: 22px;
-      margin: 8px 0 20px;
-      color: #9eacc0;
-      font-size: 14px;
+    .preset {
+      background: #14253a;
+      color: #d9e5f5;
+      border: 1px solid #29415e;
+      border-radius: 8px;
+      padding: 9px 13px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
     }
 
-    .error {
-      color: #ff7d7d;
+    .preset:hover {
+      background: #1b324d;
     }
 
-    .success {
-      color: #6fe3a1;
+    .status-message {
+      margin: 18px 0;
+      padding: 13px 15px;
+      border-radius: 8px;
+      background: #0c1b2e;
+      border: 1px solid #233b58;
+      color: #b8c6d9;
+    }
+
+    .status-message.error {
+      border-color: #7d3030;
+      color: #ffb4b4;
+      background: #241214;
     }
 
     .results-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 15px;
       margin-bottom: 15px;
-      gap: 20px;
+      flex-wrap: wrap;
     }
 
-    .results-header h2 {
-      margin: 0;
-      font-size: 21px;
+    .results-title {
+      font-size: 20px;
+      font-weight: 800;
     }
 
-    .results-header span {
-      color: #8fa0b7;
-      font-size: 13px;
+    .results-count {
+      color: #8fa1b9;
+      font-size: 14px;
     }
 
-    .property-grid {
+    .sort-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sort-area select {
+      background: #0d1b2d;
+      color: white;
+      border: 1px solid #2b425e;
+      padding: 9px 11px;
+      border-radius: 8px;
+    }
+
+    .results-grid {
       display: grid;
-      grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
-      padding-bottom: 60px;
     }
 
     .property-card {
-      background:
-        linear-gradient(
-          180deg,
-          rgba(20,39,66,.96),
-          rgba(11,24,42,.96)
-        );
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 15px;
+      background: #0d1b2d;
+      border: 1px solid #20344e;
+      border-radius: 13px;
       overflow: hidden;
-      transition:
-        transform .2s,
-        border-color .2s;
-    }
-
-    .property-card:hover {
-      transform: translateY(-3px);
-      border-color: rgba(75,165,255,.4);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
     }
 
     .property-image {
       width: 100%;
       height: 190px;
+      background: #101e31;
       display: flex;
       align-items: center;
       justify-content: center;
-      background:
-        linear-gradient(
-          135deg,
-          #101f35,
-          #172b48
-        );
-      color: #71829a;
-      font-size: 13px;
+      color: #667890;
       overflow: hidden;
     }
 
@@ -259,109 +279,77 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
     }
 
-    .property-body {
+    .property-content {
       padding: 17px;
     }
 
-    .price {
+    .property-price {
       font-size: 24px;
       font-weight: 800;
-      color: #ffffff;
       margin-bottom: 7px;
     }
 
-    .address {
-      color: #d4deeb;
-      font-size: 14px;
+    .property-address {
+      font-weight: 700;
       line-height: 1.4;
-      min-height: 40px;
+      margin-bottom: 10px;
     }
 
-    .tags {
+    .property-meta {
+      color: #aebbd0;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .property-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 7px;
-      margin: 14px 0;
+      gap: 6px;
+      margin: 12px 0;
     }
 
     .tag {
-      background: #152943;
-      color: #b8c7da;
-      padding: 6px 8px;
-      border-radius: 6px;
+      background: #15273d;
+      border: 1px solid #29415e;
+      border-radius: 999px;
+      padding: 5px 8px;
       font-size: 11px;
+      color: #c5d4e8;
     }
 
-    .details {
-      display: grid;
-      grid-template-columns:
-        repeat(2, 1fr);
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .detail {
-      padding: 9px;
-      background: rgba(255,255,255,.035);
-      border-radius: 7px;
-    }
-
-    .detail-label {
-      font-size: 10px;
-      color: #71829a;
-      margin-bottom: 3px;
-    }
-
-    .detail-value {
-      font-size: 12px;
-      color: #d7e1ee;
-      font-weight: 600;
-    }
-
-    .listing-info {
-      border-top: 1px solid rgba(255,255,255,.07);
+    .property-actions {
       margin-top: 15px;
-      padding-top: 13px;
-      color: #91a3ba;
-      font-size: 11px;
-      line-height: 1.6;
     }
 
-    .view-button {
-      display: block;
-      width: 100%;
-      margin-top: 14px;
-      padding: 11px;
-      text-align: center;
-      border-radius: 8px;
-      background: #1b76d1;
-      color: white;
+    .property-actions a {
+      display: inline-block;
       text-decoration: none;
+      color: white;
+      background: #2587ff;
+      padding: 9px 12px;
+      border-radius: 7px;
       font-size: 13px;
       font-weight: 700;
     }
 
-    .view-button:hover {
-      background: #2388ed;
-    }
-
     .unavailable {
-      background: #18263a;
-      color: #71829a;
-      cursor: default;
+      color: #7f90a7;
+      font-size: 12px;
     }
 
-    .empty {
-      background: rgba(13,28,49,.8);
-      border: 1px solid rgba(255,255,255,.07);
-      border-radius: 14px;
-      padding: 35px;
-      text-align: center;
-      color: #899bb2;
-      margin-bottom: 60px;
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .page-info {
+      color: #9eacc0;
+      font-size: 14px;
     }
 
     .login-screen {
@@ -373,69 +361,61 @@
     }
 
     .login-card {
-      width: min(420px, 100%);
-      background: #0d1c31;
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 18px;
+      width: 100%;
+      max-width: 430px;
+      background: #0d1b2d;
+      border: 1px solid #20344e;
+      border-radius: 14px;
       padding: 30px;
-      box-shadow:
-        0 20px 70px rgba(0,0,0,.4);
     }
 
     .login-card h1 {
       margin-top: 0;
-      color: #55a7ff;
+      margin-bottom: 8px;
     }
 
     .login-card p {
-      color: #93a5bc;
-      font-size: 14px;
-      line-height: 1.5;
+      color: #9eacc0;
+      margin-top: 0;
+      margin-bottom: 25px;
     }
 
     .login-card .field {
-      margin-top: 14px;
+      margin-bottom: 14px;
     }
 
-    .login-message {
-      min-height: 20px;
-      margin-top: 12px;
-      color: #ff7d7d;
-      font-size: 13px;
-    }
-
-    @media (max-width: 950px) {
-      .property-grid {
-        grid-template-columns:
-          repeat(2, minmax(0, 1fr));
+    @media (max-width: 1100px) {
+      .results-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .search-grid {
-        grid-template-columns:
-          repeat(2, minmax(0, 1fr));
+      .filter-grid,
+      .filter-grid.five {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
 
-    @media (max-width: 650px) {
+    @media (max-width: 700px) {
       header {
-        padding: 16px;
+        align-items: flex-start;
+        flex-direction: column;
       }
 
-      .user-area {
-        font-size: 11px;
+      .results-grid {
+        grid-template-columns: 1fr;
       }
 
-      .hero {
-        padding-top: 30px;
-      }
-
-      .search-grid,
-      .property-grid {
+      .filter-grid,
+      .filter-grid.five {
         grid-template-columns: 1fr;
       }
 
       .container {
-        width: 94%;
+        padding: 20px 12px 45px;
+      }
+
+      .search-panel {
+        padding: 16px;
       }
     }
   </style>
@@ -445,1311 +425,1309 @@
 
   <!-- LOGIN -->
   <div id="loginScreen" class="login-screen">
-
     <div class="login-card">
-
       <h1>Propelora</h1>
-
-      <p>
-        Search active properties for sale by location,
-        price, bedrooms and more.
-      </p>
+      <p>Property search and real-estate research.</p>
 
       <div class="field">
-        <label>Email</label>
-        <input
-          id="email"
-          type="email"
-          placeholder="you@example.com"
-        >
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" type="email" placeholder="Email">
       </div>
 
       <div class="field">
-        <label>Password</label>
-        <input
-          id="password"
-          type="password"
-          placeholder="Password"
-        >
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" placeholder="Password">
       </div>
 
-      <button
-        id="loginButton"
-        class="search-button"
-        onclick="login()"
-      >
-        Sign In
+      <button id="loginButton" class="btn btn-primary" style="width:100%;">
+        Log In
       </button>
 
-      <div
-        id="loginMessage"
-        class="login-message"
-      ></div>
-
+      <div id="loginMessage" class="status-message hidden"></div>
     </div>
-
   </div>
 
-
   <!-- APP -->
-  <div id="app" style="display:none;">
+  <div id="app" class="hidden">
 
     <header>
-
       <div class="logo">
-        PROPELORA
+        Propel<span>ora</span>
       </div>
 
       <div class="user-area">
-
         <span id="userEmail"></span>
-
-        <button
-          class="logout-btn"
-          onclick="logout()"
-        >
+        <button id="logoutButton" class="btn btn-secondary">
           Log Out
         </button>
-
       </div>
-
     </header>
-
 
     <main class="container">
 
-      <section class="hero">
-
-        <h1>
-          Find Properties.
-        </h1>
-
-        <p>
-          Search active properties for sale
-          across your target area.
-        </p>
-
-      </section>
-
-
-      <!-- SEARCH -->
-      <section class="search-box">
-
-        <div class="search-grid">
-
-          <div class="field">
-            <label>City</label>
-
-            <input
-              id="city"
-              type="text"
-              placeholder="Lima"
-            >
-          </div>
-
-
-          <div class="field">
-            <label>State</label>
-
-            <input
-              id="state"
-              type="text"
-              maxlength="2"
-              placeholder="OH"
-            >
-          </div>
-
-
-          <div class="field">
-            <label>ZIP Code</label>
-
-            <input
-              id="zipCode"
-              type="text"
-              maxlength="5"
-              placeholder="45801"
-            >
-          </div>
-
-
-          <div class="field">
-            <label>Search Radius</label>
-
-            <select id="radius">
-
-              <option value="5">
-                5 miles
-              </option>
-
-              <option
-                value="10"
-                selected
-              >
-                10 miles
-              </option>
-
-              <option value="25">
-                25 miles
-              </option>
-
-              <option value="50">
-                50 miles
-              </option>
-
-              <option value="100">
-                100 miles
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              Property Type
-            </label>
-
-            <select id="propertyType">
-
-              <option value="">
-                Any Property Type
-              </option>
-
-              <option value="Single Family">
-                Single Family
-              </option>
-
-              <option value="Condo">
-                Condo
-              </option>
-
-              <option value="Townhouse">
-                Townhouse
-              </option>
-
-              <option value="Manufactured">
-                Manufactured
-              </option>
-
-              <option value="Multi-Family">
-                Multi-Family
-              </option>
-
-              <option value="Apartment">
-                Apartment
-              </option>
-
-              <option value="Land">
-                Land
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              Minimum Price
-            </label>
-
-            <input
-              id="minPrice"
-              type="number"
-              min="0"
-              placeholder="$0"
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              Maximum Price
-            </label>
-
-            <input
-              id="maxPrice"
-              type="number"
-              min="0"
-              placeholder="$500,000"
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              Minimum Bedrooms
-            </label>
-
-            <input
-              id="bedrooms"
-              type="number"
-              min="0"
-              placeholder="Any"
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              Results
-            </label>
-
-            <select id="limit">
-
-              <option value="10">
-                10
-              </option>
-
-              <option value="20">
-                20
-              </option>
-
-              <option value="30">
-                30
-              </option>
-
-              <option value="50">
-                50
-              </option>
-
-            </select>
-
-          </div>
-
-        </div>
-
-
-        <button
-          id="searchButton"
-          class="search-button"
-          onclick="searchProperties()"
-        >
-          Search Properties
-        </button>
-
-      </section>
-
-
-      <div
-        id="status"
-        class="status"
-      ></div>
-
-
-      <div
-        id="resultsHeader"
-        class="results-header"
-        style="display:none;"
-      >
-
-        <h2>
-          Property Results
-        </h2>
-
-        <span id="resultCount"></span>
-
+      <div class="hero">
+        <h1>Property Search</h1>
+        <p>Search properties using detailed location, price, property, size and listing filters.</p>
       </div>
 
+      <section class="search-panel">
 
-      <div
-        id="propertyGrid"
-        class="property-grid"
-      ></div>
+        <div class="section-title">Quick Presets</div>
 
+        <div class="preset-buttons">
+          <button class="preset" onclick="applyPreset('homes')">Homes</button>
+          <button class="preset" onclick="applyPreset('investment')">Investment</button>
+          <button class="preset" onclick="applyPreset('fixer')">Fixer / Opportunity</button>
+          <button class="preset" onclick="applyPreset('land')">Land</button>
+          <button class="preset" onclick="applyPreset('everything')">Everything</button>
+        </div>
 
-      <div
-        id="emptyState"
-        class="empty"
-        style="display:none;"
-      >
+        <div class="filter-section">
+          <div class="section-title">Location</div>
 
-        No properties matched your search.
+          <div class="filter-grid">
+            <div class="field">
+              <label for="city">City</label>
+              <input id="city" type="text" placeholder="Lima">
+            </div>
 
-        <br><br>
+            <div class="field">
+              <label for="state">State</label>
+              <input id="state" type="text" placeholder="OH" maxlength="2">
+            </div>
 
-        Try increasing the search radius,
-        removing a filter, or increasing
-        your maximum price.
+            <div class="field">
+              <label for="zipCode">ZIP Code</label>
+              <input id="zipCode" type="text" placeholder="45801">
+            </div>
 
+            <div class="field">
+              <label for="radius">Search Radius</label>
+              <select id="radius">
+                <option value="5">5 miles</option>
+                <option value="10" selected>10 miles</option>
+                <option value="25">25 miles</option>
+                <option value="50">50 miles</option>
+                <option value="100">100 miles</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="section-title">Price</div>
+
+          <div class="filter-grid">
+            <div class="field">
+              <label for="minPrice">Minimum Price</label>
+              <input id="minPrice" type="number" min="0" placeholder="No minimum">
+            </div>
+
+            <div class="field">
+              <label for="maxPrice">Maximum Price</label>
+              <input id="maxPrice" type="number" min="0" placeholder="No maximum">
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="section-title">Property</div>
+
+          <div class="filter-grid five">
+
+            <div class="field">
+              <label for="propertyType">Property Type</label>
+              <select id="propertyType">
+                <option value="">Any Property Type</option>
+                <option value="Single Family">Single Family</option>
+                <option value="Condo">Condo</option>
+                <option value="Townhouse">Townhouse</option>
+                <option value="Multi-Family">Multi-Family</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Manufactured">Manufactured</option>
+                <option value="Land">Land</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="minBedrooms">Min Bedrooms</label>
+              <input id="minBedrooms" type="number" min="0" step="1" placeholder="Any">
+            </div>
+
+            <div class="field">
+              <label for="maxBedrooms">Max Bedrooms</label>
+              <input id="maxBedrooms" type="number" min="0" step="1" placeholder="Any">
+            </div>
+
+            <div class="field">
+              <label for="minBathrooms">Min Bathrooms</label>
+              <input id="minBathrooms" type="number" min="0" step="0.5" placeholder="Any">
+            </div>
+
+            <div class="field">
+              <label for="maxBathrooms">Max Bathrooms</label>
+              <input id="maxBathrooms" type="number" min="0" step="0.5" placeholder="Any">
+            </div>
+
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="section-title">Size & Age</div>
+
+          <div class="filter-grid">
+
+            <div class="field">
+              <label for="minSqft">Min Square Feet</label>
+              <input id="minSqft" type="number" min="0" placeholder="Any">
+            </div>
+
+            <div class="field">
+              <label for="maxSqft">Max Square Feet</label>
+              <input id="maxSqft" type="number" min="0" placeholder="Any">
+            </div>
+
+            <div class="field">
+              <label for="minLotSize">Min Lot Size</label>
+              <input id="minLotSize" type="number" min="0" placeholder="Any">
+              <div class="range-note">Use the unit supported by the listing API.</div>
+            </div>
+
+            <div class="field">
+              <label for="maxLotSize">Max Lot Size</label>
+              <input id="maxLotSize" type="number" min="0" placeholder="Any">
+            </div>
+
+            <div class="field">
+              <label for="minYearBuilt">Min Year Built</label>
+              <input id="minYearBuilt" type="number" min="1800" max="2100" placeholder="Any">
+            </div>
+
+            <div class="field">
+              <label for="maxYearBuilt">Max Year Built</label>
+              <input id="maxYearBuilt" type="number" min="1800" max="2100" placeholder="Any">
+            </div>
+
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="section-title">Listing</div>
+
+          <div class="filter-grid">
+
+            <div class="field">
+              <label for="status">Listing Status</label>
+              <select id="status">
+                <option value="Active" selected>Active</option>
+                <option value="">Any Status</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="daysOld">Maximum Days Listed</label>
+              <input id="daysOld" type="number" min="0" placeholder="Any">
+            </div>
+
+            <div class="field">
+              <label for="listingType">Listing Type</label>
+              <select id="listingType">
+                <option value="">Any Listing Type</option>
+                <option value="Standard">Standard</option>
+                <option value="New Construction">New Construction</option>
+                <option value="Foreclosure">Foreclosure</option>
+                <option value="Short Sale">Short Sale</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="sort">Sort Results</label>
+              <select id="sort">
+                <option value="default">Default</option>
+                <option value="price_low">Price: Low to High</option>
+                <option value="price_high">Price: High to Low</option>
+                <option value="newest">Newest Listings</option>
+                <option value="oldest">Oldest Listings</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="limit">Results Per Page</label>
+              <select id="limit">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="30">30</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="search-actions">
+          <button id="searchButton" class="btn btn-primary">
+            Search Properties
+          </button>
+
+          <button id="clearButton" class="btn btn-secondary">
+            Clear Filters
+          </button>
+        </div>
+
+      </section>
+
+      <div id="statusMessage" class="status-message hidden"></div>
+
+      <div class="results-header">
+        <div>
+          <div class="results-title">Results</div>
+          <div id="resultsCount" class="results-count">
+            No search performed yet.
+          </div>
+        </div>
+
+        <div class="sort-area">
+          <span style="color:#8fa1b9;font-size:13px;">Sort:</span>
+
+          <select id="sortTop">
+            <option value="default">Default</option>
+            <option value="price_low">Price: Low to High</option>
+            <option value="price_high">Price: High to Low</option>
+            <option value="newest">Newest Listings</option>
+            <option value="oldest">Oldest Listings</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="resultsGrid" class="results-grid"></div>
+
+      <div id="pagination" class="pagination hidden">
+        <button id="previousButton" class="btn btn-secondary">
+          Previous
+        </button>
+
+        <span id="pageInfo" class="page-info"></span>
+
+        <button id="nextButton" class="btn btn-secondary">
+          Next
+        </button>
       </div>
 
     </main>
-
   </div>
 
+  <script>
+    const SUPABASE_URL =
+      "https://amxqnuuqvwvinmekwqfd.supabase.co";
 
-<script>
+    const SUPABASE_ANON_KEY =
+      "sb_publishable_gCOTp1NWvsGojwYIrgu2Mg_QdLBDLmm";
 
-  // ==========================================================
-  // SUPABASE
-  // ==========================================================
+    const FUNCTION_URL =
+      `${SUPABASE_URL}/functions/v1/search-properties`;
 
-  const SUPABASE_URL =
-    "https://amxqnuuqvwvinmekwqfd.supabase.co";
-
-  const SUPABASE_ANON_KEY =
-    "sb_publishable_gCOTp1NWvsGojwYIrgu2Mg_QdLBDLmm";
-
-  const supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
-
-
-  const FUNCTION_URL =
-    `${SUPABASE_URL}/functions/v1/search-properties`;
-
-
-  // ==========================================================
-  // HELPERS
-  // ==========================================================
-
-  function escapeHtml(value) {
-
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-
-  }
-
-
-  function formatMoney(value) {
-
-    if (
-      value === null ||
-      value === undefined ||
-      value === "" ||
-      Number.isNaN(Number(value))
-    ) {
-      return "Price unavailable";
-    }
-
-    return Number(value).toLocaleString(
-      "en-US",
-      {
-        style: "currency",
-        currency: "USD",
-        maximumFractionDigits: 0
-      }
-    );
-
-  }
-
-
-  function formatNumber(value) {
-
-    if (
-      value === null ||
-      value === undefined ||
-      value === ""
-    ) {
-      return "—";
-    }
-
-    return Number(value).toLocaleString(
-      "en-US"
-    );
-
-  }
-
-
-  function setStatus(
-    message,
-    type = ""
-  ) {
-
-    const status =
-      document.getElementById("status");
-
-    status.className =
-      `status ${type}`;
-
-    status.textContent =
-      message;
-
-  }
-
-
-  // ==========================================================
-  // AUTH
-  // ==========================================================
-
-  async function checkSession() {
-
-    const {
-      data: {
-        session
-      }
-    } =
-      await supabaseClient.auth.getSession();
-
-    if (session) {
-
-      showApp(session);
-
-    } else {
-
-      showLogin();
-
-    }
-
-  }
-
-
-  function showLogin() {
-
-    document.getElementById(
-      "loginScreen"
-    ).style.display = "flex";
-
-    document.getElementById(
-      "app"
-    ).style.display = "none";
-
-  }
-
-
-  function showApp(session) {
-
-    document.getElementById(
-      "loginScreen"
-    ).style.display = "none";
-
-    document.getElementById(
-      "app"
-    ).style.display = "block";
-
-    document.getElementById(
-      "userEmail"
-    ).textContent =
-      session.user.email || "";
-
-  }
-
-
-  async function login() {
-
-    const email =
-      document.getElementById(
-        "email"
-      ).value.trim();
-
-    const password =
-      document.getElementById(
-        "password"
-      ).value;
-
-    const message =
-      document.getElementById(
-        "loginMessage"
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
       );
 
-    const button =
-      document.getElementById(
-        "loginButton"
-      );
+    let currentOffset = 0;
+    let currentTotal = 0;
+    let currentLimit = 20;
+    let lastSearchBody = null;
 
-    message.textContent = "";
+    const $ = (id) =>
+      document.getElementById(id);
 
-    if (!email || !password) {
-
-      message.textContent =
-        "Enter your email and password.";
-
-      return;
-
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
-    button.disabled = true;
-    button.textContent = "Signing In...";
+    function formatMoney(value) {
+      if (
+        value === null ||
+        value === undefined ||
+        value === "" ||
+        Number.isNaN(Number(value))
+      ) {
+        return "Price unavailable";
+      }
 
-    const {
-      error
-    } =
-      await supabaseClient.auth.signInWithPassword({
-        email,
-        password
-      });
-
-    button.disabled = false;
-    button.textContent = "Sign In";
-
-    if (error) {
-
-      message.textContent =
-        error.message;
-
-      return;
-
+      return new Intl.NumberFormat(
+        "en-US",
+        {
+          style: "currency",
+          currency: "USD",
+          maximumFractionDigits: 0
+        }
+      ).format(Number(value));
     }
 
-    await checkSession();
+    function formatNumber(value) {
+      if (
+        value === null ||
+        value === undefined ||
+        value === ""
+      ) {
+        return "—";
+      }
 
-  }
+      const number =
+        Number(value);
 
+      if (Number.isNaN(number)) {
+        return escapeHtml(value);
+      }
 
-  async function logout() {
+      return new Intl.NumberFormat(
+        "en-US"
+      ).format(number);
+    }
 
-    await supabaseClient.auth.signOut();
+    function getFirstValue(object, keys) {
+      for (const key of keys) {
+        if (
+          object &&
+          object[key] !== undefined &&
+          object[key] !== null &&
+          object[key] !== ""
+        ) {
+          return object[key];
+        }
+      }
 
-    showLogin();
+      return null;
+    }
 
-  }
+    function showStatus(message, isError = false) {
+      const box = $("statusMessage");
 
+      box.textContent = message;
+      box.classList.remove("hidden");
 
-  supabaseClient.auth.onAuthStateChange(
-    (_event, session) => {
+      if (isError) {
+        box.classList.add("error");
+      } else {
+        box.classList.remove("error");
+      }
+    }
+
+    function hideStatus() {
+      $("statusMessage")
+        .classList.add("hidden");
+    }
+
+    function showLoginMessage(message) {
+      const box = $("loginMessage");
+
+      box.textContent = message;
+      box.classList.remove("hidden");
+      box.classList.add("error");
+    }
+
+    function clearLoginMessage() {
+      $("loginMessage")
+        .classList.add("hidden");
+    }
+
+    async function checkSession() {
+      const {
+        data: { session }
+      } = await supabaseClient.auth.getSession();
 
       if (session) {
-
         showApp(session);
-
       } else {
-
         showLogin();
+      }
+    }
 
+    function showApp(session) {
+      $("loginScreen")
+        .classList.add("hidden");
+
+      $("app")
+        .classList.remove("hidden");
+
+      $("userEmail").textContent =
+        session.user.email || "";
+    }
+
+    function showLogin() {
+      $("loginScreen")
+        .classList.remove("hidden");
+
+      $("app")
+        .classList.add("hidden");
+    }
+
+    async function login() {
+      clearLoginMessage();
+
+      const email =
+        $("loginEmail").value.trim();
+
+      const password =
+        $("loginPassword").value;
+
+      if (!email || !password) {
+        showLoginMessage(
+          "Enter your email and password."
+        );
+        return;
       }
 
-    }
-  );
-
-
-  // ==========================================================
-  // SEARCH
-  // ==========================================================
-
-  async function searchProperties() {
-
-    const button =
-      document.getElementById(
-        "searchButton"
-      );
-
-    const city =
-      document.getElementById(
-        "city"
-      ).value.trim();
-
-    const state =
-      document.getElementById(
-        "state"
-      ).value.trim().toUpperCase();
-
-    const zipCode =
-      document.getElementById(
-        "zipCode"
-      ).value.trim();
-
-    const radius =
-      Number(
-        document.getElementById(
-          "radius"
-        ).value
-      );
-
-    const propertyType =
-      document.getElementById(
-        "propertyType"
-      ).value;
-
-    const minPrice =
-      document.getElementById(
-        "minPrice"
-      ).value;
-
-    const maxPrice =
-      document.getElementById(
-        "maxPrice"
-      ).value;
-
-    const bedrooms =
-      document.getElementById(
-        "bedrooms"
-      ).value;
-
-    const limit =
-      Number(
-        document.getElementById(
-          "limit"
-        ).value
-      );
-
-
-    // --------------------------
-    // VALIDATION
-    // --------------------------
-
-    if (!city && !zipCode) {
-
-      setStatus(
-        "Enter a city or ZIP code.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    if (city && !state) {
-
-      setStatus(
-        "Enter the 2-letter state abbreviation.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    if (
-      minPrice &&
-      maxPrice &&
-      Number(minPrice) >
-      Number(maxPrice)
-    ) {
-
-      setStatus(
-        "Minimum price cannot be higher than maximum price.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    // --------------------------
-    // UI
-    // --------------------------
-
-    button.disabled = true;
-
-    button.textContent =
-      "Searching...";
-
-    document.getElementById(
-      "propertyGrid"
-    ).innerHTML = "";
-
-    document.getElementById(
-      "emptyState"
-    ).style.display = "none";
-
-    document.getElementById(
-      "resultsHeader"
-    ).style.display = "none";
-
-    setStatus(
-      "Searching the property market..."
-    );
-
-
-    try {
-
-      // ------------------------
-      // GET SESSION
-      // ------------------------
+      $("loginButton").disabled = true;
+      $("loginButton").textContent =
+        "Logging in...";
 
       const {
-        data: {
-          session
-        }
+        error
       } =
-        await supabaseClient.auth.getSession();
+        await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
 
+      $("loginButton").disabled = false;
+      $("loginButton").textContent =
+        "Log In";
 
-      if (!session) {
-
-        showLogin();
-
-        throw new Error(
-          "Your login session has expired. Please sign in again."
+      if (error) {
+        showLoginMessage(
+          error.message
         );
-
+        return;
       }
 
+      await checkSession();
+    }
 
-      // ------------------------
-      // REQUEST
-      // ------------------------
+    async function logout() {
+      await supabaseClient.auth.signOut();
+      showLogin();
+    }
 
-      const response =
-        await fetch(
-          FUNCTION_URL,
-          {
-            method: "POST",
+    function getNumberOrNull(id) {
+      const value =
+        $(id).value.trim();
 
-            headers: {
-
-              "Authorization":
-                `Bearer ${session.access_token}`,
-
-              "apikey":
-                SUPABASE_ANON_KEY,
-
-              "Content-Type":
-                "application/json"
-
-            },
-
-            body:
-              JSON.stringify({
-
-                city,
-
-                state,
-
-                zipCode,
-
-                radius,
-
-                minPrice:
-                  minPrice
-                    ? Number(minPrice)
-                    : null,
-
-                maxPrice:
-                  maxPrice
-                    ? Number(maxPrice)
-                    : null,
-
-                bedrooms:
-                  bedrooms
-                    ? Number(bedrooms)
-                    : null,
-
-                propertyType,
-
-                limit
-
-              })
-
-          }
-        );
-
-
-      // ------------------------
-      // RESPONSE
-      // ------------------------
-
-      const data =
-        await response.json();
-
-
-      if (!response.ok) {
-
-        throw new Error(
-          data?.details?.message ||
-          data?.error ||
-          "Property search failed."
-        );
-
+      if (value === "") {
+        return null;
       }
 
+      const number =
+        Number(value);
 
-      if (!data.success) {
+      return Number.isFinite(number)
+        ? number
+        : null;
+    }
 
-        throw new Error(
-          data.error ||
-          "Property search failed."
-        );
+    function getSearchBody() {
+      return {
+        city:
+          $("city").value.trim(),
 
+        state:
+          $("state").value.trim(),
+
+        zipCode:
+          $("zipCode").value.trim(),
+
+        radius:
+          Number($("radius").value),
+
+        minPrice:
+          getNumberOrNull("minPrice"),
+
+        maxPrice:
+          getNumberOrNull("maxPrice"),
+
+        minBedrooms:
+          getNumberOrNull("minBedrooms"),
+
+        maxBedrooms:
+          getNumberOrNull("maxBedrooms"),
+
+        minBathrooms:
+          getNumberOrNull("minBathrooms"),
+
+        maxBathrooms:
+          getNumberOrNull("maxBathrooms"),
+
+        minSqft:
+          getNumberOrNull("minSqft"),
+
+        maxSqft:
+          getNumberOrNull("maxSqft"),
+
+        minLotSize:
+          getNumberOrNull("minLotSize"),
+
+        maxLotSize:
+          getNumberOrNull("maxLotSize"),
+
+        minYearBuilt:
+          getNumberOrNull("minYearBuilt"),
+
+        maxYearBuilt:
+          getNumberOrNull("maxYearBuilt"),
+
+        propertyType:
+          $("propertyType").value,
+
+        status:
+          $("status").value,
+
+        daysOld:
+          getNumberOrNull("daysOld"),
+
+        listingType:
+          $("listingType").value,
+
+        limit:
+          Number($("limit").value),
+
+        offset:
+          currentOffset
+      };
+    }
+
+    async function searchProperties(resetPage = true) {
+      hideStatus();
+
+      if (resetPage) {
+        currentOffset = 0;
       }
 
+      currentLimit =
+        Number($("limit").value);
 
-      const listings =
-        Array.isArray(data.listings)
-          ? data.listings
-          : [];
+      const body =
+        getSearchBody();
 
+      lastSearchBody =
+        { ...body };
 
-      // ------------------------
-      // DISPLAY COUNT
-      // ------------------------
+      $("searchButton").disabled = true;
+      $("searchButton").textContent =
+        "Searching...";
 
-      document.getElementById(
-        "resultsHeader"
-      ).style.display =
-        "flex";
+      $("resultsGrid").innerHTML = "";
 
+      try {
+        const {
+          data: { session }
+        } =
+          await supabaseClient.auth.getSession();
 
-      document.getElementById(
-        "resultCount"
-      ).textContent =
-        `${formatNumber(
-          data.totalCount
-        )} properties found within ${radius} miles`;
+        if (!session) {
+          showLogin();
+          return;
+        }
 
+        const response =
+          await fetch(
+            FUNCTION_URL,
+            {
+              method: "POST",
 
-      // ------------------------
-      // EMPTY
-      // ------------------------
+              headers: {
+                "Content-Type":
+                  "application/json",
+
+                "Authorization":
+                  `Bearer ${session.access_token}`,
+
+                "apikey":
+                  SUPABASE_ANON_KEY
+              },
+
+              body:
+                JSON.stringify(body)
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data?.details?.message ||
+            data?.error ||
+            "Search failed."
+          );
+        }
+
+        const listings =
+          Array.isArray(data.listings)
+            ? data.listings
+            : [];
+
+        currentTotal =
+          Number(data.totalCount) ||
+          listings.length;
+
+        renderResults(listings);
+
+        const shownStart =
+          listings.length
+            ? currentOffset + 1
+            : 0;
+
+        const shownEnd =
+          currentOffset +
+          listings.length;
+
+        $("resultsCount").textContent =
+          `${listings.length} shown (${shownStart}-${shownEnd}) • ${formatNumber(currentTotal)} total properties found`;
+
+        updatePagination();
+
+      } catch (error) {
+        console.error(error);
+
+        showStatus(
+          error.message ||
+          "Unable to search properties.",
+          true
+        );
+
+        $("resultsCount").textContent =
+          "Search failed.";
+      } finally {
+        $("searchButton").disabled = false;
+        $("searchButton").textContent =
+          "Search Properties";
+      }
+    }
+
+    function renderResults(listings) {
+      const grid =
+        $("resultsGrid");
 
       if (!listings.length) {
-
-        document.getElementById(
-          "emptyState"
-        ).style.display =
-          "block";
-
-        setStatus(
-          `No active properties were found within ${radius} miles.`,
-          "error"
-        );
+        grid.innerHTML = `
+          <div class="status-message">
+            No properties matched these filters.
+          </div>
+        `;
 
         return;
-
       }
 
+      let sorted =
+        [...listings];
 
-      // ------------------------
-      // SUCCESS
-      // ------------------------
+      const sort =
+        $("sort").value;
 
-      setStatus(
-        `${listings.length} properties loaded.`,
-        "success"
-      );
-
-
-      renderProperties(
-        listings
-      );
-
-
-    } catch (error) {
-
-      console.error(error);
-
-      setStatus(
-        error.message ||
-        "Something went wrong.",
-        "error"
-      );
-
-    } finally {
-
-      button.disabled = false;
-
-      button.textContent =
-        "Search Properties";
-
-    }
-
-  }
-
-
-  // ==========================================================
-  // PROPERTY RENDERING
-  // ==========================================================
-
-  function renderProperties(
-    listings
-  ) {
-
-    const grid =
-      document.getElementById(
-        "propertyGrid"
-      );
-
-
-    grid.innerHTML =
-      listings
-        .map(
-          property =>
-            createPropertyCard(
-              property
+      if (sort === "price_low") {
+        sorted.sort(
+          (a, b) =>
+            Number(
+              getFirstValue(
+                a,
+                ["price", "listPrice"]
+              )
+            ) -
+            Number(
+              getFirstValue(
+                b,
+                ["price", "listPrice"]
+              )
             )
-        )
-        .join("");
+        );
+      }
 
-  }
+      if (sort === "price_high") {
+        sorted.sort(
+          (a, b) =>
+            Number(
+              getFirstValue(
+                b,
+                ["price", "listPrice"]
+              )
+            ) -
+            Number(
+              getFirstValue(
+                a,
+                ["price", "listPrice"]
+              )
+            )
+        );
+      }
 
+      if (sort === "newest") {
+        sorted.sort(
+          (a, b) =>
+            Number(
+              getFirstValue(
+                a,
+                ["daysOnMarket", "daysListed"]
+              )
+            ) -
+            Number(
+              getFirstValue(
+                b,
+                ["daysOnMarket", "daysListed"]
+              )
+            )
+        );
+      }
 
-  function createPropertyCard(
-    property
-  ) {
+      if (sort === "oldest") {
+        sorted.sort(
+          (a, b) =>
+            Number(
+              getFirstValue(
+                b,
+                ["daysOnMarket", "daysListed"]
+              )
+            ) -
+            Number(
+              getFirstValue(
+                a,
+                ["daysOnMarket", "daysListed"]
+              )
+            )
+        );
+      }
 
-    const price =
-      formatMoney(
-        property.price
-      );
-
-
-    const address =
-      property.formattedAddress ||
-      [
-        property.addressLine1,
-        property.addressLine2,
-        property.city,
-        property.state,
-        property.zipCode
-      ]
-        .filter(Boolean)
-        .join(", ");
-
-
-    const propertyType =
-      property.propertyType ||
-      "Property";
-
-
-    const bedrooms =
-      property.bedrooms !== undefined &&
-      property.bedrooms !== null
-        ? `${property.bedrooms} bed`
-        : "";
-
-
-    const bathrooms =
-      property.bathrooms !== undefined &&
-      property.bathrooms !== null
-        ? `${property.bathrooms} bath`
-        : "";
-
-
-    const sqft =
-      property.squareFootage
-        ? `${formatNumber(
-            property.squareFootage
-          )} sq ft`
-        : "";
-
-
-    const yearBuilt =
-      property.yearBuilt
-        ? property.yearBuilt
-        : "—";
-
-
-    const daysOnMarket =
-      property.daysOnMarket !== undefined &&
-      property.daysOnMarket !== null
-        ? `${property.daysOnMarket} days`
-        : "—";
-
-
-    const listingType =
-      property.listingType ||
-      "Standard";
-
-
-    const mlsNumber =
-      property.mlsNumber ||
-      "Not available";
-
-
-    const agentName =
-      property.listingAgent?.name ||
-      "";
-
-
-    const officeName =
-      property.listingOffice?.name ||
-      "";
-
-
-    /*
-      RentCast's documented sale-listing schema
-      does not guarantee a direct listing URL
-      or property photo.
-
-      We therefore only use a URL if the
-      returned record actually contains one.
-    */
-
-    const listingUrl =
-      property.listingUrl ||
-      property.url ||
-      property.listingAgent?.website ||
-      property.listingOffice?.website ||
-      "";
-
-
-    /*
-      Try several possible image fields
-      in case RentCast adds/returns one.
-    */
-
-    let imageUrl =
-      property.photo ||
-      property.primaryImage ||
-      property.image ||
-      property.imageUrl ||
-      "";
-
-
-    if (
-      !imageUrl &&
-      Array.isArray(property.photos) &&
-      property.photos.length
-    ) {
-
-      imageUrl =
-        property.photos[0];
-
+      grid.innerHTML =
+        sorted.map(renderProperty).join("");
     }
 
+    function renderProperty(property) {
+      const price =
+        getFirstValue(
+          property,
+          ["price", "listPrice"]
+        );
 
-    const safeImage =
-      imageUrl
-        ? escapeHtml(imageUrl)
-        : "";
+      const address =
+        getFirstValue(
+          property,
+          [
+            "formattedAddress",
+            "address",
+            "streetAddress"
+          ]
+        );
 
+      const city =
+        getFirstValue(
+          property,
+          ["city"]
+        );
 
-    const imageHtml =
-      safeImage
-        ? `
-          <img
-            src="${safeImage}"
-            alt="Property"
-            loading="lazy"
-            onerror="this.parentElement.innerHTML='No image available';"
-          >
-        `
-        : `
-          <div>
-            No image available
+      const state =
+        getFirstValue(
+          property,
+          ["state"]
+        );
+
+      const zip =
+        getFirstValue(
+          property,
+          ["zipCode", "zip"]
+        );
+
+      const fullAddress =
+        address ||
+        [
+          city,
+          state,
+          zip
+        ].filter(Boolean).join(", ");
+
+      const propertyType =
+        getFirstValue(
+          property,
+          [
+            "propertyType",
+            "propertySubType"
+          ]
+        );
+
+      const bedrooms =
+        getFirstValue(
+          property,
+          [
+            "bedrooms",
+            "beds"
+          ]
+        );
+
+      const bathrooms =
+        getFirstValue(
+          property,
+          [
+            "bathrooms",
+            "baths"
+          ]
+        );
+
+      const sqft =
+        getFirstValue(
+          property,
+          [
+            "squareFootage",
+            "sqft",
+            "livingArea"
+          ]
+        );
+
+      const lotSize =
+        getFirstValue(
+          property,
+          [
+            "lotSize",
+            "lotSizeSqFt"
+          ]
+        );
+
+      const yearBuilt =
+        getFirstValue(
+          property,
+          ["yearBuilt"]
+        );
+
+      const daysOnMarket =
+        getFirstValue(
+          property,
+          [
+            "daysOnMarket",
+            "daysListed"
+          ]
+        );
+
+      const listingType =
+        getFirstValue(
+          property,
+          ["listingType"]
+        );
+
+      const status =
+        getFirstValue(
+          property,
+          ["status"]
+        );
+
+      const mls =
+        getFirstValue(
+          property,
+          [
+            "mlsNumber",
+            "mlsId"
+          ]
+        );
+
+      const agent =
+        getFirstValue(
+          property,
+          [
+            "listingAgent",
+            "agentName"
+          ]
+        );
+
+      const office =
+        getFirstValue(
+          property,
+          [
+            "listingOffice",
+            "officeName"
+          ]
+        );
+
+      const image =
+        getFirstValue(
+          property,
+          [
+            "photo",
+            "primaryImage",
+            "image",
+            "imageUrl"
+          ]
+        );
+
+      const photos =
+        Array.isArray(property.photos)
+          ? property.photos
+          : [];
+
+      const finalImage =
+        image ||
+        photos[0] ||
+        null;
+
+      const listingUrl =
+        getFirstValue(
+          property,
+          [
+            "listingUrl",
+            "url"
+          ]
+        );
+
+      const safeUrl =
+        typeof listingUrl === "string" &&
+        /^https?:\/\//i.test(listingUrl)
+          ? listingUrl
+          : null;
+
+      const imageHtml =
+        finalImage
+          ? `
+            <img
+              src="${escapeHtml(finalImage)}"
+              alt="Property"
+              onerror="this.parentElement.innerHTML='<span>Image unavailable</span>'"
+            >
+          `
+          : `
+            <span>Image unavailable</span>
+          `;
+
+      const agentText =
+        typeof agent === "object"
+          ? getFirstValue(
+              agent,
+              ["name", "fullName"]
+            )
+          : agent;
+
+      const officeText =
+        typeof office === "object"
+          ? getFirstValue(
+              office,
+              ["name"]
+            )
+          : office;
+
+      return `
+        <article class="property-card">
+
+          <div class="property-image">
+            ${imageHtml}
           </div>
-        `;
 
+          <div class="property-content">
 
-    const viewButton =
-      listingUrl
-        ? `
-          <a
-            class="view-button"
-            href="${escapeHtml(
-              listingUrl
-            )}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View Listing
-          </a>
-        `
-        : `
-          <div class="view-button unavailable">
-            Listing Link Unavailable
-          </div>
-        `;
+            <div class="property-price">
+              ${formatMoney(price)}
+            </div>
 
-
-    return `
-
-      <article class="property-card">
-
-        <div class="property-image">
-          ${imageHtml}
-        </div>
-
-
-        <div class="property-body">
-
-          <div class="price">
-            ${escapeHtml(price)}
-          </div>
-
-
-          <div class="address">
-            ${escapeHtml(
-              address ||
-              "Address unavailable"
-            )}
-          </div>
-
-
-          <div class="tags">
-
-            <span class="tag">
+            <div class="property-address">
               ${escapeHtml(
-                propertyType
+                fullAddress ||
+                "Address unavailable"
               )}
-            </span>
+            </div>
 
-            ${
-              bedrooms
-                ? `
-                  <span class="tag">
-                    ${escapeHtml(
-                      bedrooms
-                    )}
-                  </span>
-                `
-                : ""
-            }
+            <div class="property-meta">
 
-            ${
-              bathrooms
-                ? `
-                  <span class="tag">
-                    ${escapeHtml(
-                      bathrooms
-                    )}
-                  </span>
-                `
-                : ""
-            }
+              ${propertyType
+                ? `Property Type: ${escapeHtml(propertyType)}<br>`
+                : ""}
 
-            ${
-              sqft
-                ? `
-                  <span class="tag">
-                    ${escapeHtml(
-                      sqft
-                    )}
-                  </span>
-                `
-                : ""
-            }
+              ${bedrooms !== null && bedrooms !== undefined
+                ? `Bedrooms: ${escapeHtml(bedrooms)}<br>`
+                : ""}
 
-          </div>
+              ${bathrooms !== null && bathrooms !== undefined
+                ? `Bathrooms: ${escapeHtml(bathrooms)}<br>`
+                : ""}
 
+              ${sqft !== null && sqft !== undefined
+                ? `Square Feet: ${formatNumber(sqft)}<br>`
+                : ""}
 
-          <div class="details">
+              ${lotSize !== null && lotSize !== undefined
+                ? `Lot Size: ${formatNumber(lotSize)}<br>`
+                : ""}
 
-            <div class="detail">
+              ${yearBuilt
+                ? `Year Built: ${escapeHtml(yearBuilt)}<br>`
+                : ""}
 
-              <div class="detail-label">
-                YEAR BUILT
-              </div>
-
-              <div class="detail-value">
-                ${escapeHtml(
-                  yearBuilt
-                )}
-              </div>
+              ${daysOnMarket !== null && daysOnMarket !== undefined
+                ? `Days Listed: ${escapeHtml(daysOnMarket)}<br>`
+                : ""}
 
             </div>
 
+            <div class="property-tags">
 
-            <div class="detail">
+              ${listingType
+                ? `<span class="tag">${escapeHtml(listingType)}</span>`
+                : ""}
 
-              <div class="detail-label">
-                DAYS ON MARKET
-              </div>
+              ${status
+                ? `<span class="tag">${escapeHtml(status)}</span>`
+                : ""}
 
-              <div class="detail-value">
-                ${escapeHtml(
-                  daysOnMarket
-                )}
-              </div>
-
-            </div>
-
-
-            <div class="detail">
-
-              <div class="detail-label">
-                LISTING TYPE
-              </div>
-
-              <div class="detail-value">
-                ${escapeHtml(
-                  listingType
-                )}
-              </div>
+              ${mls
+                ? `<span class="tag">MLS ${escapeHtml(mls)}</span>`
+                : ""}
 
             </div>
 
+            ${agentText
+              ? `<div class="property-meta">Agent: ${escapeHtml(agentText)}</div>`
+              : ""}
 
-            <div class="detail">
+            ${officeText
+              ? `<div class="property-meta">Office: ${escapeHtml(officeText)}</div>`
+              : ""}
 
-              <div class="detail-label">
-                MLS
-              </div>
+            <div class="property-actions">
 
-              <div class="detail-value">
-                ${escapeHtml(
-                  mlsNumber
-                )}
-              </div>
+              ${
+                safeUrl
+                  ? `
+                    <a
+                      href="${escapeHtml(safeUrl)}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View Listing
+                    </a>
+                  `
+                  : `
+                    <span class="unavailable">
+                      Listing link unavailable
+                    </span>
+                  `
+              }
 
             </div>
 
           </div>
+        </article>
+      `;
+    }
 
+    function updatePagination() {
+      const pagination =
+        $("pagination");
 
-          <div class="listing-info">
+      const hasPrevious =
+        currentOffset > 0;
 
-            ${
-              agentName
-                ? `
-                  <strong>
-                    Agent:
-                  </strong>
-                  ${escapeHtml(
-                    agentName
-                  )}
-                  <br>
-                `
-                : ""
-            }
+      const hasNext =
+        currentOffset +
+        currentLimit <
+        currentTotal;
 
-            ${
-              officeName
-                ? `
-                  <strong>
-                    Office:
-                  </strong>
-                  ${escapeHtml(
-                    officeName
-                  )}
-                  <br>
-                `
-                : ""
-            }
+      if (
+        !hasPrevious &&
+        !hasNext
+      ) {
+        pagination.classList.add("hidden");
+        return;
+      }
 
-            ${
-              property.status
-                ? `
-                  <strong>
-                    Status:
-                  </strong>
-                  ${escapeHtml(
-                    property.status
-                  )}
-                `
-                : ""
-            }
+      pagination.classList.remove("hidden");
 
-          </div>
+      $("previousButton").disabled =
+        !hasPrevious;
 
+      $("nextButton").disabled =
+        !hasNext;
 
-          ${viewButton}
+      const page =
+        Math.floor(
+          currentOffset /
+          currentLimit
+        ) + 1;
 
-        </div>
+      const totalPages =
+        Math.max(
+          1,
+          Math.ceil(
+            currentTotal /
+            currentLimit
+          )
+        );
 
-      </article>
+      $("pageInfo").textContent =
+        `Page ${page} of ${totalPages}`;
+    }
 
-    `;
+    function clearFilters() {
+      $("city").value = "";
+      $("state").value = "";
+      $("zipCode").value = "";
+      $("radius").value = "10";
 
-  }
+      $("minPrice").value = "";
+      $("maxPrice").value = "";
 
+      $("propertyType").value = "";
 
-  // ==========================================================
-  // START
-  // ==========================================================
+      $("minBedrooms").value = "";
+      $("maxBedrooms").value = "";
 
-  checkSession();
+      $("minBathrooms").value = "";
+      $("maxBathrooms").value = "";
 
-</script>
+      $("minSqft").value = "";
+      $("maxSqft").value = "";
+
+      $("minLotSize").value = "";
+      $("maxLotSize").value = "";
+
+      $("minYearBuilt").value = "";
+      $("maxYearBuilt").value = "";
+
+      $("status").value = "Active";
+      $("daysOld").value = "";
+      $("listingType").value = "";
+
+      $("sort").value = "default";
+      $("sortTop").value = "default";
+      $("limit").value = "20";
+
+      $("resultsGrid").innerHTML = "";
+
+      $("resultsCount").textContent =
+        "No search performed yet.";
+
+      $("pagination")
+        .classList.add("hidden");
+
+      hideStatus();
+    }
+
+    function applyPreset(type) {
+      clearFilters();
+
+      if (type === "homes") {
+        $("propertyType").value =
+          "Single Family";
+      }
+
+      if (type === "investment") {
+        $("propertyType").value =
+          "Multi-Family";
+
+        $("minBedrooms").value = "2";
+      }
+
+      if (type === "fixer") {
+        $("maxPrice").value = "150000";
+        $("daysOld").value = "180";
+      }
+
+      if (type === "land") {
+        $("propertyType").value =
+          "Land";
+      }
+
+      if (type === "everything") {
+        $("propertyType").value = "";
+        $("status").value = "Active";
+      }
+    }
+
+    $("loginButton")
+      .addEventListener(
+        "click",
+        login
+      );
+
+    $("logoutButton")
+      .addEventListener(
+        "click",
+        logout
+      );
+
+    $("searchButton")
+      .addEventListener(
+        "click",
+        () => searchProperties(true)
+      );
+
+    $("clearButton")
+      .addEventListener(
+        "click",
+        clearFilters
+      );
+
+    $("previousButton")
+      .addEventListener(
+        "click",
+        () => {
+          currentOffset =
+            Math.max(
+              0,
+              currentOffset -
+              currentLimit
+            );
+
+          searchProperties(false);
+        }
+      );
+
+    $("nextButton")
+      .addEventListener(
+        "click",
+        () => {
+          currentOffset +=
+            currentLimit;
+
+          searchProperties(false);
+        }
+      );
+
+    $("sortTop")
+      .addEventListener(
+        "change",
+        () => {
+          $("sort").value =
+            $("sortTop").value;
+
+          if (lastSearchBody) {
+            searchProperties(false);
+          }
+        }
+      );
+
+    $("sort")
+      .addEventListener(
+        "change",
+        () => {
+          $("sortTop").value =
+            $("sort").value;
+
+          if (lastSearchBody) {
+            searchProperties(false);
+          }
+        }
+      );
+
+    supabaseClient.auth.onAuthStateChange(
+      (_event, session) => {
+        if (session) {
+          showApp(session);
+        } else {
+          showLogin();
+        }
+      }
+    );
+
+    checkSession();
+  </script>
 
 </body>
 </html>
