@@ -1,126 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
 
-  <title>Propelora | Property Search</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Propelora</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #07111f;
+      margin: 0;
+      font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+      background:
+        linear-gradient(
+          135deg,
+          #07111f,
+          #0b1728 45%,
+          #101c30
+        );
       color: #ffffff;
       min-height: 100vh;
     }
 
     header {
-      background: #0b1728;
-      border-bottom: 1px solid #1b2c43;
-      padding: 18px 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 20px 30px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(5,12,24,.8);
+      backdrop-filter: blur(10px);
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 20;
     }
 
     .logo {
       font-size: 25px;
       font-weight: 800;
-      color: #35a7ff;
-      letter-spacing: 0.5px;
+      letter-spacing: .5px;
+      color: #55a7ff;
     }
 
-    .auth-buttons {
+    .user-area {
       display: flex;
-      gap: 10px;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: #aebbd0;
     }
 
     button {
-      border: none;
       cursor: pointer;
-      font-weight: 700;
+      border: 0;
+    }
+
+    .logout-btn {
+      background: #1c2b42;
+      color: white;
+      padding: 9px 14px;
       border-radius: 8px;
-      transition: 0.2s;
     }
 
-    .btn {
-      padding: 11px 17px;
-    }
-
-    .btn-primary {
-      background: #178cff;
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: #0878df;
-    }
-
-    .btn-secondary {
-      background: #17263a;
-      color: white;
-      border: 1px solid #2b405c;
-    }
-
-    .btn-secondary:hover {
-      background: #20344d;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 55px 20px 35px;
-    }
-
-    .hero h1 {
-      font-size: clamp(34px, 6vw, 62px);
-      margin-bottom: 15px;
-    }
-
-    .hero h1 span {
-      color: #269aff;
-    }
-
-    .hero p {
-      color: #9eb0c7;
-      font-size: 18px;
-      max-width: 700px;
-      margin: auto;
-      line-height: 1.6;
+    .logout-btn:hover {
+      background: #263b58;
     }
 
     .container {
-      width: min(1200px, 94%);
-      margin: auto;
+      width: min(1200px, 92%);
+      margin: 0 auto;
     }
 
-    .search-panel {
-      background: #0d1b2d;
-      border: 1px solid #203650;
-      border-radius: 16px;
-      padding: 25px;
-      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+    .hero {
+      padding: 50px 0 25px;
     }
 
-    .search-panel h2 {
-      margin-bottom: 20px;
-      font-size: 23px;
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      color: #9eacc0;
+      font-size: 17px;
+      margin: 0;
+      max-width: 700px;
+    }
+
+    .search-box {
+      background: rgba(13,28,49,.9);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 18px;
+      padding: 22px;
+      margin: 20px 0 35px;
+      box-shadow:
+        0 15px 45px rgba(0,0,0,.25);
     }
 
     .search-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+      gap: 14px;
     }
 
     .field {
@@ -130,18 +125,18 @@
     }
 
     .field label {
-      color: #9eb0c7;
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 12px;
+      color: #9eacc0;
+      font-weight: 600;
     }
 
     input,
     select {
       width: 100%;
-      padding: 13px;
-      border-radius: 8px;
-      border: 1px solid #29415e;
-      background: #081522;
+      padding: 12px 13px;
+      border-radius: 9px;
+      border: 1px solid #263a56;
+      background: #091728;
       color: white;
       outline: none;
       font-size: 14px;
@@ -149,279 +144,298 @@
 
     input:focus,
     select:focus {
-      border-color: #269aff;
+      border-color: #4da3ff;
+      box-shadow:
+        0 0 0 3px rgba(77,163,255,.12);
     }
 
     .search-button {
-      margin-top: 18px;
+      margin-top: 17px;
       width: 100%;
-      padding: 15px;
-      font-size: 16px;
-      background: #178cff;
+      padding: 14px;
+      border-radius: 10px;
+      background:
+        linear-gradient(
+          135deg,
+          #2685f5,
+          #4ba5ff
+        );
       color: white;
+      font-size: 15px;
+      font-weight: 800;
+      transition: .2s;
     }
 
     .search-button:hover {
-      background: #0878df;
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+    }
+
+    .search-button:disabled {
+      opacity: .6;
+      cursor: wait;
+      transform: none;
     }
 
     .status {
-      margin-top: 18px;
-      padding: 13px;
-      border-radius: 8px;
-      display: none;
-      line-height: 1.5;
+      min-height: 22px;
+      margin: 8px 0 20px;
+      color: #9eacc0;
+      font-size: 14px;
     }
 
-    .status.error {
-      display: block;
-      background: #3b1820;
-      border: 1px solid #7d2c3b;
-      color: #ffb6c1;
+    .error {
+      color: #ff7d7d;
     }
 
-    .status.success {
-      display: block;
-      background: #12351f;
-      border: 1px solid #28683d;
-      color: #a7e8b9;
-    }
-
-    .results-section {
-      padding: 35px 0 60px;
+    .success {
+      color: #6fe3a1;
     }
 
     .results-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      gap: 15px;
-    }
-
-    .results-header h2 {
-      font-size: 25px;
-    }
-
-    #resultCount {
-      color: #8fa3bb;
-    }
-
-    .results-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      margin-bottom: 15px;
       gap: 20px;
     }
 
+    .results-header h2 {
+      margin: 0;
+      font-size: 21px;
+    }
+
+    .results-header span {
+      color: #8fa0b7;
+      font-size: 13px;
+    }
+
+    .property-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      padding-bottom: 60px;
+    }
+
     .property-card {
-      background: #0d1b2d;
-      border: 1px solid #203650;
-      border-radius: 14px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(20,39,66,.96),
+          rgba(11,24,42,.96)
+        );
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 15px;
       overflow: hidden;
-      transition: transform 0.2s, border-color 0.2s;
+      transition:
+        transform .2s,
+        border-color .2s;
     }
 
     .property-card:hover {
-      transform: translateY(-4px);
-      border-color: #269aff;
+      transform: translateY(-3px);
+      border-color: rgba(75,165,255,.4);
     }
 
     .property-image {
       width: 100%;
-      height: 210px;
+      height: 190px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        linear-gradient(
+          135deg,
+          #101f35,
+          #172b48
+        );
+      color: #71829a;
+      font-size: 13px;
+      overflow: hidden;
+    }
+
+    .property-image img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      background: #111d2c;
+      display: block;
     }
 
-    .property-content {
-      padding: 18px;
+    .property-body {
+      padding: 17px;
     }
 
-    .property-price {
+    .price {
       font-size: 24px;
       font-weight: 800;
-      color: #35a7ff;
+      color: #ffffff;
       margin-bottom: 7px;
     }
 
-    .property-address {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      line-height: 1.4;
-    }
-
-    .property-details {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      color: #a9b8ca;
+    .address {
+      color: #d4deeb;
       font-size: 14px;
-      margin-bottom: 15px;
+      line-height: 1.4;
+      min-height: 40px;
     }
 
-    .property-type {
-      color: #8196ae;
-      font-size: 13px;
-      margin-bottom: 15px;
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 14px 0;
     }
 
-    .property-link {
+    .tag {
+      background: #152943;
+      color: #b8c7da;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns:
+        repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .detail {
+      padding: 9px;
+      background: rgba(255,255,255,.035);
+      border-radius: 7px;
+    }
+
+    .detail-label {
+      font-size: 10px;
+      color: #71829a;
+      margin-bottom: 3px;
+    }
+
+    .detail-value {
+      font-size: 12px;
+      color: #d7e1ee;
+      font-weight: 600;
+    }
+
+    .listing-info {
+      border-top: 1px solid rgba(255,255,255,.07);
+      margin-top: 15px;
+      padding-top: 13px;
+      color: #91a3ba;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .view-button {
       display: block;
-      text-align: center;
-      text-decoration: none;
-      background: #17263a;
-      color: white;
+      width: 100%;
+      margin-top: 14px;
       padding: 11px;
+      text-align: center;
       border-radius: 8px;
+      background: #1b76d1;
+      color: white;
+      text-decoration: none;
+      font-size: 13px;
       font-weight: 700;
     }
 
-    .property-link:hover {
-      background: #20344d;
+    .view-button:hover {
+      background: #2388ed;
     }
 
-    .empty-state {
-      text-align: center;
-      padding: 50px 20px;
-      color: #8498b0;
-      background: #0d1b2d;
-      border: 1px solid #203650;
+    .unavailable {
+      background: #18263a;
+      color: #71829a;
+      cursor: default;
+    }
+
+    .empty {
+      background: rgba(13,28,49,.8);
+      border: 1px solid rgba(255,255,255,.07);
       border-radius: 14px;
-    }
-
-    .loading {
-      display: none;
+      padding: 35px;
       text-align: center;
-      padding: 30px;
-      color: #8fb8df;
+      color: #899bb2;
+      margin-bottom: 60px;
     }
 
-    .spinner {
-      width: 32px;
-      height: 32px;
-      border: 3px solid #28415e;
-      border-top-color: #269aff;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 12px;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      z-index: 1000;
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
 
-    .modal-box {
-      width: min(430px, 100%);
-      background: #0d1b2d;
-      border: 1px solid #29415e;
-      border-radius: 15px;
-      padding: 25px;
-      position: relative;
+    .login-card {
+      width: min(420px, 100%);
+      background: #0d1c31;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow:
+        0 20px 70px rgba(0,0,0,.4);
     }
 
-    .modal-box h2 {
-      margin-bottom: 20px;
+    .login-card h1 {
+      margin-top: 0;
+      color: #55a7ff;
     }
 
-    .close {
-      position: absolute;
-      right: 18px;
-      top: 15px;
-      font-size: 25px;
-      background: transparent;
-      color: #9eb0c7;
-    }
-
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 13px;
-    }
-
-    .auth-form button {
-      padding: 13px;
-    }
-
-    .auth-switch {
-      text-align: center;
-      color: #8fa3bb;
-      margin-top: 15px;
+    .login-card p {
+      color: #93a5bc;
       font-size: 14px;
+      line-height: 1.5;
     }
 
-    .auth-switch button {
-      background: none;
-      color: #35a7ff;
-      padding: 0;
+    .login-card .field {
+      margin-top: 14px;
     }
 
-    .user-info {
-      display: none;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .user-email {
-      color: #9eb0c7;
+    .login-message {
+      min-height: 20px;
+      margin-top: 12px;
+      color: #ff7d7d;
       font-size: 13px;
     }
 
-    footer {
-      border-top: 1px solid #1b2c43;
-      background: #091524;
-      padding: 30px 20px;
-      text-align: center;
-      color: #71859d;
-      font-size: 13px;
-    }
+    @media (max-width: 950px) {
+      .property-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
 
-    @media (max-width: 900px) {
       .search-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .results-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
       }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 650px) {
       header {
-        padding: 15px;
+        padding: 16px;
+      }
+
+      .user-area {
+        font-size: 11px;
       }
 
       .hero {
-        padding-top: 35px;
+        padding-top: 30px;
       }
 
-      .search-grid {
+      .search-grid,
+      .property-grid {
         grid-template-columns: 1fr;
       }
 
-      .results-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .user-email {
-        display: none;
-      }
-
-      .logo {
-        font-size: 21px;
+      .container {
+        width: 94%;
       }
     }
   </style>
@@ -429,227 +443,362 @@
 
 <body>
 
-<header>
-  <div class="logo">PROPELORA</div>
+  <!-- LOGIN -->
+  <div id="loginScreen" class="login-screen">
 
-  <div class="auth-buttons">
-    <div class="user-info" id="userInfo">
-      <span class="user-email" id="userEmail"></span>
-      <button class="btn btn-secondary" onclick="logout()">Log Out</button>
-    </div>
+    <div class="login-card">
 
-    <div id="authButtons">
-      <button class="btn btn-secondary" onclick="openAuth('login')">
-        Log In
-      </button>
-      <button class="btn btn-primary" onclick="openAuth('signup')">
-        Sign Up
-      </button>
-    </div>
-  </div>
-</header>
+      <h1>Propelora</h1>
 
-<section class="hero">
-  <h1>Find Your Next <span>Property</span></h1>
-  <p>
-    Search active property listings and discover opportunities
-    using Propelora's property search.
-  </p>
-</section>
-
-<main class="container">
-
-  <section class="search-panel">
-    <h2>Property Search</h2>
-
-    <div class="search-grid">
+      <p>
+        Search active properties for sale by location,
+        price, bedrooms and more.
+      </p>
 
       <div class="field">
-        <label for="city">City</label>
+        <label>Email</label>
         <input
-          id="city"
-          type="text"
-          placeholder="Lima"
-        />
+          id="email"
+          type="email"
+          placeholder="you@example.com"
+        >
       </div>
 
       <div class="field">
-        <label for="state">State</label>
+        <label>Password</label>
         <input
-          id="state"
-          type="text"
-          placeholder="OH"
-        />
+          id="password"
+          type="password"
+          placeholder="Password"
+        >
       </div>
-
-      <div class="field">
-        <label for="zipCode">ZIP Code</label>
-        <input
-          id="zipCode"
-          type="text"
-          placeholder="45801"
-        />
-      </div>
-
-      <div class="field">
-        <label for="propertyType">Property Type</label>
-
-        <select id="propertyType">
-          <option value="">Any Property Type</option>
-          <option value="Single Family">Single Family</option>
-          <option value="Condo">Condo</option>
-          <option value="Townhouse">Townhouse</option>
-          <option value="Multi-Family">Multi-Family</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="minPrice">Minimum Price</label>
-        <input
-          id="minPrice"
-          type="number"
-          placeholder="50000"
-          min="0"
-        />
-      </div>
-
-      <div class="field">
-        <label for="maxPrice">Maximum Price</label>
-        <input
-          id="maxPrice"
-          type="number"
-          placeholder="250000"
-          min="0"
-        />
-      </div>
-
-      <div class="field">
-        <label for="bedrooms">Minimum Bedrooms</label>
-        <input
-          id="bedrooms"
-          type="number"
-          placeholder="2"
-          min="0"
-        />
-      </div>
-
-      <div class="field">
-        <label for="limit">Number of Results</label>
-        <select id="limit">
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
-          <option value="50">50</option>
-        </select>
-      </div>
-
-    </div>
-
-    <button
-      class="search-button"
-      id="searchButton"
-      onclick="searchProperties()"
-    >
-      Search Properties
-    </button>
-
-    <div id="status" class="status"></div>
-  </section>
-
-  <section class="results-section">
-
-    <div class="results-header">
-      <h2>Property Results</h2>
-      <span id="resultCount"></span>
-    </div>
-
-    <div id="loading" class="loading">
-      <div class="spinner"></div>
-      Searching properties...
-    </div>
-
-    <div id="results" class="results-grid">
-      <div class="empty-state">
-        Enter a location above and click
-        <strong>Search Properties</strong> to begin.
-      </div>
-    </div>
-
-  </section>
-
-</main>
-
-<footer>
-  © 2026 Propelora. Property data provided through third-party services.
-</footer>
-
-<!-- AUTH MODAL -->
-
-<div class="modal" id="authModal">
-
-  <div class="modal-box">
-
-    <button class="close" onclick="closeAuth()">×</button>
-
-    <h2 id="authTitle">Log In</h2>
-
-    <div class="auth-form">
-
-      <input
-        id="authEmail"
-        type="email"
-        placeholder="Email address"
-      />
-
-      <input
-        id="authPassword"
-        type="password"
-        placeholder="Password"
-      />
 
       <button
-        class="btn-primary"
-        id="authSubmit"
-        onclick="submitAuth()"
+        id="loginButton"
+        class="search-button"
+        onclick="login()"
       >
-        Log In
+        Sign In
       </button>
 
+      <div
+        id="loginMessage"
+        class="login-message"
+      ></div>
+
     </div>
-
-    <div class="auth-switch">
-      <span id="authSwitchText">
-        Don't have an account?
-      </span>
-
-      <button onclick="toggleAuthMode()" id="authSwitchButton">
-        Sign Up
-      </button>
-    </div>
-
-    <div
-      id="authStatus"
-      class="status"
-      style="margin-top:15px;"
-    ></div>
 
   </div>
 
-</div>
+
+  <!-- APP -->
+  <div id="app" style="display:none;">
+
+    <header>
+
+      <div class="logo">
+        PROPELORA
+      </div>
+
+      <div class="user-area">
+
+        <span id="userEmail"></span>
+
+        <button
+          class="logout-btn"
+          onclick="logout()"
+        >
+          Log Out
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <main class="container">
+
+      <section class="hero">
+
+        <h1>
+          Find Properties.
+        </h1>
+
+        <p>
+          Search active properties for sale
+          across your target area.
+        </p>
+
+      </section>
+
+
+      <!-- SEARCH -->
+      <section class="search-box">
+
+        <div class="search-grid">
+
+          <div class="field">
+            <label>City</label>
+
+            <input
+              id="city"
+              type="text"
+              placeholder="Lima"
+            >
+          </div>
+
+
+          <div class="field">
+            <label>State</label>
+
+            <input
+              id="state"
+              type="text"
+              maxlength="2"
+              placeholder="OH"
+            >
+          </div>
+
+
+          <div class="field">
+            <label>ZIP Code</label>
+
+            <input
+              id="zipCode"
+              type="text"
+              maxlength="5"
+              placeholder="45801"
+            >
+          </div>
+
+
+          <div class="field">
+            <label>Search Radius</label>
+
+            <select id="radius">
+
+              <option value="5">
+                5 miles
+              </option>
+
+              <option
+                value="10"
+                selected
+              >
+                10 miles
+              </option>
+
+              <option value="25">
+                25 miles
+              </option>
+
+              <option value="50">
+                50 miles
+              </option>
+
+              <option value="100">
+                100 miles
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Property Type
+            </label>
+
+            <select id="propertyType">
+
+              <option value="">
+                Any Property Type
+              </option>
+
+              <option value="Single Family">
+                Single Family
+              </option>
+
+              <option value="Condo">
+                Condo
+              </option>
+
+              <option value="Townhouse">
+                Townhouse
+              </option>
+
+              <option value="Manufactured">
+                Manufactured
+              </option>
+
+              <option value="Multi-Family">
+                Multi-Family
+              </option>
+
+              <option value="Apartment">
+                Apartment
+              </option>
+
+              <option value="Land">
+                Land
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Minimum Price
+            </label>
+
+            <input
+              id="minPrice"
+              type="number"
+              min="0"
+              placeholder="$0"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Maximum Price
+            </label>
+
+            <input
+              id="maxPrice"
+              type="number"
+              min="0"
+              placeholder="$500,000"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Minimum Bedrooms
+            </label>
+
+            <input
+              id="bedrooms"
+              type="number"
+              min="0"
+              placeholder="Any"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Results
+            </label>
+
+            <select id="limit">
+
+              <option value="10">
+                10
+              </option>
+
+              <option value="20">
+                20
+              </option>
+
+              <option value="30">
+                30
+              </option>
+
+              <option value="50">
+                50
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <button
+          id="searchButton"
+          class="search-button"
+          onclick="searchProperties()"
+        >
+          Search Properties
+        </button>
+
+      </section>
+
+
+      <div
+        id="status"
+        class="status"
+      ></div>
+
+
+      <div
+        id="resultsHeader"
+        class="results-header"
+        style="display:none;"
+      >
+
+        <h2>
+          Property Results
+        </h2>
+
+        <span id="resultCount"></span>
+
+      </div>
+
+
+      <div
+        id="propertyGrid"
+        class="property-grid"
+      ></div>
+
+
+      <div
+        id="emptyState"
+        class="empty"
+        style="display:none;"
+      >
+
+        No properties matched your search.
+
+        <br><br>
+
+        Try increasing the search radius,
+        removing a filter, or increasing
+        your maximum price.
+
+      </div>
+
+    </main>
+
+  </div>
+
 
 <script>
-  // ==========================================
-  // SUPABASE CONFIGURATION
-  // ==========================================
+
+  // ==========================================================
+  // SUPABASE
+  // ==========================================================
 
   const SUPABASE_URL =
     "https://amxqnuuqvwvinmekwqfd.supabase.co";
 
   const SUPABASE_ANON_KEY =
     "sb_publishable_gCOTp1NWvsGojwYIrgu2Mg_QdLBDLmm";
-
-  const FUNCTION_URL =
-    SUPABASE_URL + "/functions/v1/search-properties";
 
   const supabaseClient =
     window.supabase.createClient(
@@ -658,228 +807,198 @@
     );
 
 
-  // ==========================================
-  // AUTH STATE
-  // ==========================================
-
-  let currentSession = null;
-  let authMode = "login";
+  const FUNCTION_URL =
+    `${SUPABASE_URL}/functions/v1/search-properties`;
 
 
-  async function loadSession() {
+  // ==========================================================
+  // HELPERS
+  // ==========================================================
 
-    const {
-      data,
-      error
-    } = await supabaseClient.auth.getSession();
+  function escapeHtml(value) {
 
-    if (error) {
-      console.error(error);
-      return;
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  function formatMoney(value) {
+
+    if (
+      value === null ||
+      value === undefined ||
+      value === "" ||
+      Number.isNaN(Number(value))
+    ) {
+      return "Price unavailable";
     }
 
-    currentSession = data.session;
+    return Number(value).toLocaleString(
+      "en-US",
+      {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0
+      }
+    );
 
-    updateAuthUI();
   }
 
 
-  supabaseClient.auth.onAuthStateChange(
-    (_event, session) => {
+  function formatNumber(value) {
 
-      currentSession = session;
-
-      updateAuthUI();
+    if (
+      value === null ||
+      value === undefined ||
+      value === ""
+    ) {
+      return "—";
     }
-  );
 
+    return Number(value).toLocaleString(
+      "en-US"
+    );
 
-  function updateAuthUI() {
-
-    const authButtons =
-      document.getElementById("authButtons");
-
-    const userInfo =
-      document.getElementById("userInfo");
-
-    const userEmail =
-      document.getElementById("userEmail");
-
-    if (currentSession) {
-
-      authButtons.style.display = "none";
-      userInfo.style.display = "flex";
-
-      userEmail.textContent =
-        currentSession.user.email || "";
-
-    } else {
-
-      authButtons.style.display = "flex";
-      userInfo.style.display = "none";
-
-      userEmail.textContent = "";
-    }
   }
 
 
-  // ==========================================
-  // AUTH MODAL
-  // ==========================================
-
-  function openAuth(mode) {
-
-    authMode = mode;
-
-    document.getElementById("authModal").style.display =
-      "flex";
-
-    updateAuthModal();
-  }
-
-
-  function closeAuth() {
-
-    document.getElementById("authModal").style.display =
-      "none";
-
-    document.getElementById("authStatus").style.display =
-      "none";
-  }
-
-
-  function toggleAuthMode() {
-
-    authMode =
-      authMode === "login"
-        ? "signup"
-        : "login";
-
-    updateAuthModal();
-  }
-
-
-  function updateAuthModal() {
-
-    const title =
-      document.getElementById("authTitle");
-
-    const submit =
-      document.getElementById("authSubmit");
-
-    const switchText =
-      document.getElementById("authSwitchText");
-
-    const switchButton =
-      document.getElementById("authSwitchButton");
-
-    if (authMode === "login") {
-
-      title.textContent = "Log In";
-      submit.textContent = "Log In";
-      switchText.textContent =
-        "Don't have an account?";
-      switchButton.textContent =
-        "Sign Up";
-
-    } else {
-
-      title.textContent = "Create Account";
-      submit.textContent = "Sign Up";
-      switchText.textContent =
-        "Already have an account?";
-      switchButton.textContent =
-        "Log In";
-    }
-  }
-
-
-  async function submitAuth() {
-
-    const email =
-      document.getElementById("authEmail")
-        .value
-        .trim();
-
-    const password =
-      document.getElementById("authPassword")
-        .value;
+  function setStatus(
+    message,
+    type = ""
+  ) {
 
     const status =
-      document.getElementById("authStatus");
+      document.getElementById("status");
+
+    status.className =
+      `status ${type}`;
+
+    status.textContent =
+      message;
+
+  }
+
+
+  // ==========================================================
+  // AUTH
+  // ==========================================================
+
+  async function checkSession() {
+
+    const {
+      data: {
+        session
+      }
+    } =
+      await supabaseClient.auth.getSession();
+
+    if (session) {
+
+      showApp(session);
+
+    } else {
+
+      showLogin();
+
+    }
+
+  }
+
+
+  function showLogin() {
+
+    document.getElementById(
+      "loginScreen"
+    ).style.display = "flex";
+
+    document.getElementById(
+      "app"
+    ).style.display = "none";
+
+  }
+
+
+  function showApp(session) {
+
+    document.getElementById(
+      "loginScreen"
+    ).style.display = "none";
+
+    document.getElementById(
+      "app"
+    ).style.display = "block";
+
+    document.getElementById(
+      "userEmail"
+    ).textContent =
+      session.user.email || "";
+
+  }
+
+
+  async function login() {
+
+    const email =
+      document.getElementById(
+        "email"
+      ).value.trim();
+
+    const password =
+      document.getElementById(
+        "password"
+      ).value;
+
+    const message =
+      document.getElementById(
+        "loginMessage"
+      );
+
+    const button =
+      document.getElementById(
+        "loginButton"
+      );
+
+    message.textContent = "";
 
     if (!email || !password) {
 
-      showAuthStatus(
-        "Enter your email and password.",
-        true
-      );
+      message.textContent =
+        "Enter your email and password.";
 
       return;
+
     }
 
-    status.className = "status";
-    status.style.display = "none";
+    button.disabled = true;
+    button.textContent = "Signing In...";
 
-    let result;
+    const {
+      error
+    } =
+      await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
 
-    if (authMode === "login") {
+    button.disabled = false;
+    button.textContent = "Sign In";
 
-      result =
-        await supabaseClient.auth.signInWithPassword({
-          email,
-          password
-        });
+    if (error) {
 
-    } else {
-
-      result =
-        await supabaseClient.auth.signUp({
-          email,
-          password
-        });
-    }
-
-    if (result.error) {
-
-      showAuthStatus(
-        result.error.message,
-        true
-      );
+      message.textContent =
+        error.message;
 
       return;
+
     }
 
-    if (authMode === "signup") {
+    await checkSession();
 
-      if (!result.data.session) {
-
-        showAuthStatus(
-          "Account created. Check your email to confirm your account.",
-          false
-        );
-
-        return;
-      }
-    }
-
-    closeAuth();
-  }
-
-
-  function showAuthStatus(message, isError) {
-
-    const status =
-      document.getElementById("authStatus");
-
-    status.textContent = message;
-
-    status.className =
-      isError
-        ? "status error"
-        : "status success";
-
-    status.style.display = "block";
   }
 
 
@@ -887,125 +1006,188 @@
 
     await supabaseClient.auth.signOut();
 
-    currentSession = null;
+    showLogin();
 
-    updateAuthUI();
   }
 
 
-  // ==========================================
-  // SEARCH PROPERTIES
-  // ==========================================
+  supabaseClient.auth.onAuthStateChange(
+    (_event, session) => {
+
+      if (session) {
+
+        showApp(session);
+
+      } else {
+
+        showLogin();
+
+      }
+
+    }
+  );
+
+
+  // ==========================================================
+  // SEARCH
+  // ==========================================================
 
   async function searchProperties() {
 
+    const button =
+      document.getElementById(
+        "searchButton"
+      );
+
     const city =
-      document.getElementById("city")
-        .value
-        .trim();
+      document.getElementById(
+        "city"
+      ).value.trim();
 
     const state =
-      document.getElementById("state")
-        .value
-        .trim();
+      document.getElementById(
+        "state"
+      ).value.trim().toUpperCase();
 
     const zipCode =
-      document.getElementById("zipCode")
-        .value
-        .trim();
+      document.getElementById(
+        "zipCode"
+      ).value.trim();
+
+    const radius =
+      Number(
+        document.getElementById(
+          "radius"
+        ).value
+      );
 
     const propertyType =
-      document.getElementById("propertyType")
-        .value;
+      document.getElementById(
+        "propertyType"
+      ).value;
 
     const minPrice =
-      document.getElementById("minPrice")
-        .value;
+      document.getElementById(
+        "minPrice"
+      ).value;
 
     const maxPrice =
-      document.getElementById("maxPrice")
-        .value;
+      document.getElementById(
+        "maxPrice"
+      ).value;
 
     const bedrooms =
-      document.getElementById("bedrooms")
-        .value;
+      document.getElementById(
+        "bedrooms"
+      ).value;
 
     const limit =
-      document.getElementById("limit")
-        .value;
-
-
-    // Require login
-    if (!currentSession) {
-
-      showStatus(
-        "Please log in or create an account before searching.",
-        true
+      Number(
+        document.getElementById(
+          "limit"
+        ).value
       );
 
-      openAuth("login");
 
-      return;
-    }
+    // --------------------------
+    // VALIDATION
+    // --------------------------
 
-
-    // Require location
     if (!city && !zipCode) {
 
-      showStatus(
+      setStatus(
         "Enter a city or ZIP code.",
-        true
+        "error"
       );
 
       return;
+
     }
 
 
-    const searchButton =
-      document.getElementById("searchButton");
+    if (city && !state) {
 
-    const loading =
-      document.getElementById("loading");
+      setStatus(
+        "Enter the 2-letter state abbreviation.",
+        "error"
+      );
 
-    const results =
-      document.getElementById("results");
+      return;
+
+    }
 
 
-    searchButton.disabled = true;
-    searchButton.textContent =
+    if (
+      minPrice &&
+      maxPrice &&
+      Number(minPrice) >
+      Number(maxPrice)
+    ) {
+
+      setStatus(
+        "Minimum price cannot be higher than maximum price.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    // --------------------------
+    // UI
+    // --------------------------
+
+    button.disabled = true;
+
+    button.textContent =
       "Searching...";
 
-    loading.style.display = "block";
+    document.getElementById(
+      "propertyGrid"
+    ).innerHTML = "";
 
-    results.innerHTML = "";
+    document.getElementById(
+      "emptyState"
+    ).style.display = "none";
 
-    document.getElementById("resultCount")
-      .textContent = "";
+    document.getElementById(
+      "resultsHeader"
+    ).style.display = "none";
 
-    hideStatus();
+    setStatus(
+      "Searching the property market..."
+    );
 
 
     try {
 
+      // ------------------------
+      // GET SESSION
+      // ------------------------
+
       const {
-        data: sessionData,
-        error: sessionError
+        data: {
+          session
+        }
       } =
         await supabaseClient.auth.getSession();
 
 
-      if (sessionError ||
-          !sessionData.session) {
+      if (!session) {
+
+        showLogin();
 
         throw new Error(
-          "Your login session has expired. Please log in again."
+          "Your login session has expired. Please sign in again."
         );
+
       }
 
 
-      currentSession =
-        sessionData.session;
-
+      // ------------------------
+      // REQUEST
+      // ------------------------
 
       const response =
         await fetch(
@@ -1014,73 +1196,80 @@
             method: "POST",
 
             headers: {
+
               "Authorization":
-                "Bearer " +
-                currentSession.access_token,
+                `Bearer ${session.access_token}`,
 
               "apikey":
                 SUPABASE_ANON_KEY,
 
               "Content-Type":
                 "application/json"
+
             },
 
-            body: JSON.stringify({
-              city,
-              state,
-              zipCode,
-              minPrice,
-              maxPrice,
-              bedrooms,
-              propertyType,
-              limit: Number(limit)
-            })
+            body:
+              JSON.stringify({
+
+                city,
+
+                state,
+
+                zipCode,
+
+                radius,
+
+                minPrice:
+                  minPrice
+                    ? Number(minPrice)
+                    : null,
+
+                maxPrice:
+                  maxPrice
+                    ? Number(maxPrice)
+                    : null,
+
+                bedrooms:
+                  bedrooms
+                    ? Number(bedrooms)
+                    : null,
+
+                propertyType,
+
+                limit
+
+              })
+
           }
         );
 
 
-      let data;
+      // ------------------------
+      // RESPONSE
+      // ------------------------
 
-      try {
-
-        data = await response.json();
-
-      } catch {
-
-        throw new Error(
-          "The property search returned an invalid response."
-        );
-      }
+      const data =
+        await response.json();
 
 
       if (!response.ok) {
 
-        let message =
+        throw new Error(
+          data?.details?.message ||
+          data?.error ||
+          "Property search failed."
+        );
+
+      }
+
+
+      if (!data.success) {
+
+        throw new Error(
           data.error ||
-          "Property search failed.";
+          "Property search failed."
+        );
 
-        if (data.details) {
-
-          if (
-            typeof data.details ===
-            "string"
-          ) {
-
-            message +=
-              " " +
-              data.details;
-
-          } else if (
-            data.details.message
-          ) {
-
-            message +=
-              " " +
-              data.details.message;
-          }
-        }
-
-        throw new Error(message);
       }
 
 
@@ -1090,101 +1279,116 @@
           : [];
 
 
-      renderResults(listings);
+      // ------------------------
+      // DISPLAY COUNT
+      // ------------------------
+
+      document.getElementById(
+        "resultsHeader"
+      ).style.display =
+        "flex";
 
 
-      showStatus(
-        listings.length +
-          " propert" +
-          (listings.length === 1
-            ? "y"
-            : "ies") +
-          " found.",
-        false
+      document.getElementById(
+        "resultCount"
+      ).textContent =
+        `${formatNumber(
+          data.totalCount
+        )} properties found within ${radius} miles`;
+
+
+      // ------------------------
+      // EMPTY
+      // ------------------------
+
+      if (!listings.length) {
+
+        document.getElementById(
+          "emptyState"
+        ).style.display =
+          "block";
+
+        setStatus(
+          `No active properties were found within ${radius} miles.`,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      // ------------------------
+      // SUCCESS
+      // ------------------------
+
+      setStatus(
+        `${listings.length} properties loaded.`,
+        "success"
       );
+
+
+      renderProperties(
+        listings
+      );
+
 
     } catch (error) {
 
       console.error(error);
 
-      results.innerHTML = `
-        <div class="empty-state">
-          <h3>Search failed</h3>
-          <p style="margin-top:10px;">
-            ${escapeHtml(error.message)}
-          </p>
-        </div>
-      `;
-
-      showStatus(
-        error.message,
-        true
+      setStatus(
+        error.message ||
+        "Something went wrong.",
+        "error"
       );
 
     } finally {
 
-      searchButton.disabled = false;
-      searchButton.textContent =
+      button.disabled = false;
+
+      button.textContent =
         "Search Properties";
 
-      loading.style.display = "none";
     }
+
   }
 
 
-  // ==========================================
-  // RENDER PROPERTY RESULTS
-  // ==========================================
+  // ==========================================================
+  // PROPERTY RENDERING
+  // ==========================================================
 
-  function renderResults(listings) {
+  function renderProperties(
+    listings
+  ) {
 
-    const results =
-      document.getElementById("results");
-
-    const resultCount =
-      document.getElementById("resultCount");
-
-
-    resultCount.textContent =
-      listings.length +
-      " result" +
-      (listings.length === 1
-        ? ""
-        : "s");
+    const grid =
+      document.getElementById(
+        "propertyGrid"
+      );
 
 
-    if (!listings.length) {
-
-      results.innerHTML = `
-        <div class="empty-state">
-          <h3>No properties found</h3>
-          <p style="margin-top:10px;">
-            Try changing your location,
-            price range, or other filters.
-          </p>
-        </div>
-      `;
-
-      return;
-    }
-
-
-    results.innerHTML =
+    grid.innerHTML =
       listings
-        .map(propertyCard)
+        .map(
+          property =>
+            createPropertyCard(
+              property
+            )
+        )
         .join("");
+
   }
 
 
-  function propertyCard(property) {
+  function createPropertyCard(
+    property
+  ) {
 
-    const image =
-      property.photo ||
-      (
-        Array.isArray(property.photos) &&
-        property.photos.length
-          ? property.photos[0]
-          : ""
+    const price =
+      formatMoney(
+        property.price
       );
 
 
@@ -1192,230 +1396,358 @@
       property.formattedAddress ||
       [
         property.addressLine1,
+        property.addressLine2,
         property.city,
         property.state,
         property.zipCode
       ]
         .filter(Boolean)
-        .join(", ") ||
-      "Address unavailable";
+        .join(", ");
 
 
-    const price =
-      property.price != null
-        ? "$" +
-          Number(property.price)
-            .toLocaleString()
-        : "Price unavailable";
-
-
-    const bedrooms =
-      property.bedrooms != null
-        ? property.bedrooms +
-          " bed"
-        : "";
-
-
-    const bathrooms =
-      property.bathrooms != null
-        ? property.bathrooms +
-          " bath"
-        : "";
-
-
-    const squareFootage =
-      property.squareFootage != null
-        ? Number(
-            property.squareFootage
-          ).toLocaleString() +
-          " sq ft"
-        : "";
-
-
-    const details =
-      [
-        bedrooms,
-        bathrooms,
-        squareFootage
-      ]
-        .filter(Boolean)
-        .join(" • ");
-
-
-    const type =
+    const propertyType =
       property.propertyType ||
       "Property";
 
 
-    const listingUrl =
-      property.listingUrl ||
-      property.url ||
-      "";
-
-
-    const safeImage =
-      image
-        ? escapeAttribute(image)
+    const bedrooms =
+      property.bedrooms !== undefined &&
+      property.bedrooms !== null
+        ? `${property.bedrooms} bed`
         : "";
 
 
+    const bathrooms =
+      property.bathrooms !== undefined &&
+      property.bathrooms !== null
+        ? `${property.bathrooms} bath`
+        : "";
+
+
+    const sqft =
+      property.squareFootage
+        ? `${formatNumber(
+            property.squareFootage
+          )} sq ft`
+        : "";
+
+
+    const yearBuilt =
+      property.yearBuilt
+        ? property.yearBuilt
+        : "—";
+
+
+    const daysOnMarket =
+      property.daysOnMarket !== undefined &&
+      property.daysOnMarket !== null
+        ? `${property.daysOnMarket} days`
+        : "—";
+
+
+    const listingType =
+      property.listingType ||
+      "Standard";
+
+
+    const mlsNumber =
+      property.mlsNumber ||
+      "Not available";
+
+
+    const agentName =
+      property.listingAgent?.name ||
+      "";
+
+
+    const officeName =
+      property.listingOffice?.name ||
+      "";
+
+
+    /*
+      RentCast's documented sale-listing schema
+      does not guarantee a direct listing URL
+      or property photo.
+
+      We therefore only use a URL if the
+      returned record actually contains one.
+    */
+
+    const listingUrl =
+      property.listingUrl ||
+      property.url ||
+      property.listingAgent?.website ||
+      property.listingOffice?.website ||
+      "";
+
+
+    /*
+      Try several possible image fields
+      in case RentCast adds/returns one.
+    */
+
+    let imageUrl =
+      property.photo ||
+      property.primaryImage ||
+      property.image ||
+      property.imageUrl ||
+      "";
+
+
+    if (
+      !imageUrl &&
+      Array.isArray(property.photos) &&
+      property.photos.length
+    ) {
+
+      imageUrl =
+        property.photos[0];
+
+    }
+
+
+    const safeImage =
+      imageUrl
+        ? escapeHtml(imageUrl)
+        : "";
+
+
+    const imageHtml =
+      safeImage
+        ? `
+          <img
+            src="${safeImage}"
+            alt="Property"
+            loading="lazy"
+            onerror="this.parentElement.innerHTML='No image available';"
+          >
+        `
+        : `
+          <div>
+            No image available
+          </div>
+        `;
+
+
+    const viewButton =
+      listingUrl
+        ? `
+          <a
+            class="view-button"
+            href="${escapeHtml(
+              listingUrl
+            )}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View Listing
+          </a>
+        `
+        : `
+          <div class="view-button unavailable">
+            Listing Link Unavailable
+          </div>
+        `;
+
+
     return `
+
       <article class="property-card">
 
-        ${
-          safeImage
-            ? `
-              <img
-                class="property-image"
-                src="${safeImage}"
-                alt="Property"
-                onerror="this.style.display='none'"
-              />
-            `
-            : `
-              <div
-                class="property-image"
-                style="
-                  display:flex;
-                  align-items:center;
-                  justify-content:center;
-                  color:#71859d;
-                "
-              >
-                No Image Available
-              </div>
-            `
-        }
+        <div class="property-image">
+          ${imageHtml}
+        </div>
 
-        <div class="property-content">
 
-          <div class="property-price">
+        <div class="property-body">
+
+          <div class="price">
             ${escapeHtml(price)}
           </div>
 
-          <div class="property-address">
-            ${escapeHtml(address)}
+
+          <div class="address">
+            ${escapeHtml(
+              address ||
+              "Address unavailable"
+            )}
           </div>
 
-          ${
-            details
-              ? `
-                <div class="property-details">
-                  ${escapeHtml(details)}
-                </div>
-              `
-              : ""
-          }
 
-          <div class="property-type">
-            ${escapeHtml(type)}
+          <div class="tags">
+
+            <span class="tag">
+              ${escapeHtml(
+                propertyType
+              )}
+            </span>
+
+            ${
+              bedrooms
+                ? `
+                  <span class="tag">
+                    ${escapeHtml(
+                      bedrooms
+                    )}
+                  </span>
+                `
+                : ""
+            }
+
+            ${
+              bathrooms
+                ? `
+                  <span class="tag">
+                    ${escapeHtml(
+                      bathrooms
+                    )}
+                  </span>
+                `
+                : ""
+            }
+
+            ${
+              sqft
+                ? `
+                  <span class="tag">
+                    ${escapeHtml(
+                      sqft
+                    )}
+                  </span>
+                `
+                : ""
+            }
+
           </div>
 
-          ${
-            listingUrl
-              ? `
-                <a
-                  class="property-link"
-                  href="${escapeAttribute(listingUrl)}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View Listing
-                </a>
-              `
-              : `
-                <div
-                  class="property-link"
-                  style="opacity:.5;"
-                >
-                  Listing Link Unavailable
-                </div>
-              `
-          }
+
+          <div class="details">
+
+            <div class="detail">
+
+              <div class="detail-label">
+                YEAR BUILT
+              </div>
+
+              <div class="detail-value">
+                ${escapeHtml(
+                  yearBuilt
+                )}
+              </div>
+
+            </div>
+
+
+            <div class="detail">
+
+              <div class="detail-label">
+                DAYS ON MARKET
+              </div>
+
+              <div class="detail-value">
+                ${escapeHtml(
+                  daysOnMarket
+                )}
+              </div>
+
+            </div>
+
+
+            <div class="detail">
+
+              <div class="detail-label">
+                LISTING TYPE
+              </div>
+
+              <div class="detail-value">
+                ${escapeHtml(
+                  listingType
+                )}
+              </div>
+
+            </div>
+
+
+            <div class="detail">
+
+              <div class="detail-label">
+                MLS
+              </div>
+
+              <div class="detail-value">
+                ${escapeHtml(
+                  mlsNumber
+                )}
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="listing-info">
+
+            ${
+              agentName
+                ? `
+                  <strong>
+                    Agent:
+                  </strong>
+                  ${escapeHtml(
+                    agentName
+                  )}
+                  <br>
+                `
+                : ""
+            }
+
+            ${
+              officeName
+                ? `
+                  <strong>
+                    Office:
+                  </strong>
+                  ${escapeHtml(
+                    officeName
+                  )}
+                  <br>
+                `
+                : ""
+            }
+
+            ${
+              property.status
+                ? `
+                  <strong>
+                    Status:
+                  </strong>
+                  ${escapeHtml(
+                    property.status
+                  )}
+                `
+                : ""
+            }
+
+          </div>
+
+
+          ${viewButton}
 
         </div>
+
       </article>
+
     `;
+
   }
 
 
-  // ==========================================
-  // STATUS MESSAGES
-  // ==========================================
+  // ==========================================================
+  // START
+  // ==========================================================
 
-  function showStatus(message, isError) {
-
-    const status =
-      document.getElementById("status");
-
-    status.textContent =
-      message;
-
-    status.className =
-      isError
-        ? "status error"
-        : "status success";
-
-    status.style.display =
-      "block";
-  }
-
-
-  function hideStatus() {
-
-    const status =
-      document.getElementById("status");
-
-    status.style.display =
-      "none";
-  }
-
-
-  // ==========================================
-  // SECURITY HELPERS
-  // ==========================================
-
-  function escapeHtml(value) {
-
-    return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-
-  function escapeAttribute(value) {
-
-    return escapeHtml(value);
-  }
-
-
-  // ==========================================
-  // ENTER KEY SEARCH
-  // ==========================================
-
-  document.addEventListener(
-    "keydown",
-    function(event) {
-
-      if (
-        event.key === "Enter" &&
-        document.activeElement.tagName !== "BUTTON"
-      ) {
-
-        searchProperties();
-      }
-    }
-  );
-
-
-  // ==========================================
-  // START APP
-  // ==========================================
-
-  loadSession();
+  checkSession();
 
 </script>
 
